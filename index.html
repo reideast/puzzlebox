@@ -109,7 +109,7 @@
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
     <div id="wheel">
 
-        <div id="wheel-circle-background"></div>
+        <div id="wheel-circle-background" class="draggable-handle"></div>
 
         <!-- Boxes inserted here with JavaScript -->
     </div>
@@ -126,6 +126,7 @@
 
         const textContainerElem = document.createElement('div');
         textContainerElem.classList.add('box-text');// textContainerElem.className = 'box-text';
+        textContainerElem.classList.add('draggable-handle');
         textContainerElem.appendChild(textContentElem);
 
         const outerBoxElem = document.createElement('div');
@@ -167,7 +168,8 @@
     Draggable.create(wheel, {
         type: 'rotation',
         minimumMovement: 10,
-        dragClickables: true
+        dragClickables: true,
+        trigger: ".draggable-handle"
     });
 </script>
 </body>
