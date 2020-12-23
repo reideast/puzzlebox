@@ -11,6 +11,8 @@
 
     <script>
         const wheelSize = 1000;
+        const boxSize = 64;
+        const fontSize = '24px';
     </script>
 
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
@@ -24,6 +26,7 @@
         }
 
         #wheel {
+            /* Must be set to a defined size (by JavaScript) */
             position: relative;
             outline: 1px solid red;
         }
@@ -34,8 +37,6 @@
         .box {
             position: absolute;
             border: 4px solid black;
-            width: 64px;
-            height: 64px;
             top: 0;
             left: 0;
         }
@@ -45,9 +46,7 @@
         }
 
         .box-image {
-            font-size: 24px;
-            width: 64px;
-            height: 64px;
+            /* Contains the text for this slice */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -75,6 +74,11 @@
         insertRule('#wheel', `height: ${wheelSize}px`)
         insertRule('#wheel-image', `width: ${wheelSize}px`)
         insertRule('#wheel-image', `height: ${wheelSize}px`)
+        insertRule(".box", `width: ${boxSize}px`)
+        insertRule(".box", `height: ${boxSize}px`)
+        insertRule(".box-image", `width: ${boxSize}px`)
+        insertRule(".box-image", `height: ${boxSize}px`)
+        insertRule(".box-image", `font-size: ${fontSize}`)
     </script>
 </head>
 <body>
@@ -170,8 +174,8 @@
     var wheel = $("#wheel");
     var boxes = $(".box");
 
-    var center = 500;
-    var radius = 420;
+    var center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
+    var radius = center - (boxSize * 1.2); // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
     var total  = boxes.length;
     var slice  = 2 * Math.PI / total;
 
