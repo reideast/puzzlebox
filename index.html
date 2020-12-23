@@ -21,8 +21,7 @@
 
         .wheel {
             position: absolute;
-            outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
-            pointer-events: none; /* Will "pass through" any clicks/taps to elements underneith in z-order */
+            pointer-events: none; /* Will "pass through" any clicks/taps to elements underneath in z-order */
         }
 
         .wheel-circle-background {
@@ -87,8 +86,8 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '18px', 'cornflowerblue', 'blue',
-            740, 32
+            '24px', '#006767', 'black',
+            640, 42
         )
     )
 
@@ -98,8 +97,32 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '16px', 'coral', 'crimson',
-            650, 28
+            '23px', '#008080', 'black',
+            530, 42
+        )
+    )
+
+    wheels.push(
+        generateWheelPropertiesObject(
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            '22px', '#009a9a', 'black',
+            420, 42
+        )
+    )
+
+    wheels.push(
+        generateWheelPropertiesObject(
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            '21px', '#00b3b3', 'black',
+            310, 42
+        )
+    )
+
+    wheels.push(
+        generateWheelPropertiesObject(
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            '20px', '#00cdcd', 'black',
+            200, 42
         )
     )
 
@@ -116,6 +139,9 @@
     function insertRule(selector, rule) {
         stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
     }
+
+    // Set the height of the wheels area to a defined value
+    insertRule('#container-wheels', `height: ${CENTER_AXIS * 2}px`)
 
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
@@ -143,7 +169,7 @@
         insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
         insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
         insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
-        insertRule(`.box-text-${i}`, `background: ${currentWheel.ringColor}`)
+        // Re-create this rule if you want each character box to have a defined box: insertRule(`.box-text-${i}`, `background: ${currentWheel.ringColor}`)
 
 
         // Create outer container for this wheel
