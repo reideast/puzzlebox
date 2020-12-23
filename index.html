@@ -16,7 +16,7 @@
         }
 
         body {
-            overflow: scroll;
+            overflow: hidden;
         }
 
         .wheel {
@@ -48,11 +48,12 @@
         #container-wheels {
             background-color: rgba(0, 200, 200, 0.1); /* DEBUG */
             position: relative;
+            max-width: 540px;
         }
     </style>
 </head>
 <body>
-<div id="container-wheels" class="container-md">
+<div id="container-wheels" class="container-fluid">
     <!-- Wheels inserted here with JavaScript -->
 </div>
 
@@ -82,12 +83,17 @@
         };
     }
 
+    // Gather page properties to do layout
+    const FULL_WIDTH = document.getElementById("container-wheels").clientWidth;
+    const WHEEL_WIDTH = FULL_WIDTH / 16;
+    const FONT_LARGEST = 24 * FULL_WIDTH / 540;
+
     // Outer code wheel
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '24px', '#006767', 'black',
-            640, 42
+            FONT_LARGEST, '#006767', 'black',
+            FULL_WIDTH * 6/6, WHEEL_WIDTH
         )
     )
 
@@ -97,32 +103,32 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '23px', '#008080', 'black',
-            530, 42
+            FONT_LARGEST - 1, '#008080', 'black',
+            FULL_WIDTH * 5/6, WHEEL_WIDTH
         )
     )
 
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '22px', '#009a9a', 'black',
-            420, 42
+            FONT_LARGEST - 2, '#009a9a', 'black',
+            FULL_WIDTH * 4/6, WHEEL_WIDTH
         )
     )
 
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '21px', '#00b3b3', 'black',
-            310, 42
+            FONT_LARGEST - 3, '#00b3b3', 'black',
+            FULL_WIDTH * 3/6, WHEEL_WIDTH
         )
     )
 
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            '20px', '#00cdcd', 'black',
-            200, 42
+            FONT_LARGEST - 4, '#00cdcd', 'black',
+            FULL_WIDTH * 2/6, WHEEL_WIDTH
         )
     )
 
@@ -168,7 +174,7 @@
         // Box text holder
         insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
         insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
-        insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
+        insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}px`)
         // Re-create this rule if you want each character box to have a defined box: insertRule(`.box-text-${i}`, `background: ${currentWheel.ringColor}`)
 
 
