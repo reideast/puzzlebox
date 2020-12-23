@@ -22,18 +22,21 @@
         .wheel-container {
             position: relative;
             outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
+            pointer-events: none; /* Will "pass through" any clicks/taps to elements underneith in z-order */
         }
 
         .wheel-circle-background {
             border-style: solid;
             border-radius: 50%; /* Makes this into a circle */
             position: relative; /* left & top set dynamically */
+            pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
         }
 
         .box {
             position: absolute;
             top: 0;
             left: 0;
+            pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
         }
 
         .box-text {
