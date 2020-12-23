@@ -68,27 +68,40 @@
     // Define the various code wheels
     const wheels = [];
 
+    function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize) {
+        return {
+            symbols: symbols,
+            fontSize: fontSize,
+            ringColor: ringColor,
+            innerColor: innerColor,
+
+            wheelSize: wheelSize, // Total width of the container square
+            boxSize: boxSize, // Size of boxes that contain the symbols
+            center: wheelSize / 2, // Center point, and the axis of rotation. The center is halfway across the diameter of the entire wheel element
+            radius: (wheelSize / 2) * 0.85, // Width of the wheel's circle, inside of the container square. Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+            slice: 2 * Math.PI / symbols.length, // Arc given to each symbol, in radians
+        };
+    }
+
     // Outer code wheel
-    let newWheelObject = {
-        symbols:  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-        fontSize:  '18px',
-        ringColor: 'cornflowerblue',
-        innerColor: 'blue',
-
-        wheelSize: 740, // Total width of the container square
-        boxSize: 32, // Size of boxes that contain the symbols
-        center: undefined, // Center point, and the axis of rotation
-        radius: undefined, // Width of the wheel's circle, inside of the container square
-        slice: undefined, // Arc given to each symbol, in radians
-    };
-    // calculate dependent properties
-    newWheelObject.center = newWheelObject.wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
-    newWheelObject.radius = newWheelObject.center * 0.85; // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
-    newWheelObject.slice = 2 * Math.PI / newWheelObject.symbols.length;
-
-    wheels.push(newWheelObject)
+    wheels.push(
+        generateWheelPropertiesObject(
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            '18px', 'cornflowerblue', 'blue',
+            740, 32
+        )
+    )
 
     const CENTER_AXIS = wheels[0].center; // Save the center of the largest wheel. Later, all wheels will be positioned around this
+
+    // Second largest code wheel
+    wheels.push(
+        generateWheelPropertiesObject(
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            '16px', 'coral', 'crimson',
+            650, 28
+        )
+    )
 
 
     // Stylesheet rule insertion following guide of: https://stackoverflow.com/a/8630641/5271224
