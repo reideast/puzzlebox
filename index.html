@@ -50,11 +50,39 @@
             position: relative;
             max-width: 540px;
         }
+
+        #selected-letters-encircled {
+            border: 3px solid goldenrod;
+            border-radius: 10px;
+            position: absolute;
+            z-index: 1000;
+            pointer-events: none;
+            /* Position and size are set dynamically */
+            display: none; /* hide me until positioned correctly (prevents jumpy rendering) */
+        }
+
+        #selected-letters-pointer {
+            /* Make a small triangle, see https://css-tricks.com/snippets/css/css-triangle/ */
+            width: 0;
+            height: 0;
+            /* Border-width, which sets the width of the triangle, must be set dynamically */
+            border-style: solid;
+            border-color: goldenrod;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            position: relative;
+            top: 0;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
 <div id="container-wheels" class="container-fluid">
     <!-- Wheels inserted here with JavaScript -->
+
+    <div id="selected-letters-encircled"><div id="selected-letters-pointer"></div></div>
 </div>
 
 <!-- Bootstrap Bundle with Popper -->
@@ -148,6 +176,14 @@
 
     // Set the height of the wheels area to a defined value
     insertRule('#container-wheels', `height: ${CENTER_AXIS * 2}px`)
+
+    // Position the box & pointer that indicates which letters are selected
+    insertRule('#selected-letters-pointer', `border-width: ${FONT_LARGEST * 0.35}px`) // Because of the css-trick, border-width is actually the width of the triangle
+    insertRule('#selected-letters-encircled', `height: ${CENTER_AXIS * 0.75}px`)
+    insertRule('#selected-letters-encircled', `width: ${FONT_LARGEST * 1.35}px`)
+    insertRule('#selected-letters-encircled', `top: ${CENTER_AXIS * 0.065}px`)
+    insertRule('#selected-letters-encircled', `left: ${CENTER_AXIS - ((FONT_LARGEST * 1.35) / 2)}px`)
+    insertRule('#selected-letters-encircled', 'display: block')
 
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
