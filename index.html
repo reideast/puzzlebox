@@ -274,12 +274,6 @@
             minimumMovement: 10,
             dragClickables: true,
             trigger: `.draggable-handle-${i}`, // Trigger is a selector that limits which part of the element's subtree because the clickable drag handles
-            liveSnap: {
-                rotation: function(value) {
-                    // snap to the closest slice
-                    return Math.round(value / SLICE_IN_DEGREES) * SLICE_IN_DEGREES;
-                }
-            },
         });
     }
 </script>
