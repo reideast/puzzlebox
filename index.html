@@ -13,6 +13,7 @@
         const wheelSize = 740;
         const boxSize = 32;
         const fontSize = '18px';
+        const symbols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     </script>
 
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
@@ -87,59 +88,31 @@
 
         <img id="wheel-image" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/compass3.png" alt="" />
 
-        <div class="box">
-            <div class="box-image">1</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">2</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">3</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">4</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">5</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">6</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">7</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">8</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">9</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">10</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">11</div>
-        </div>
-
-        <div class="box">
-            <div class="box-image">12</div>
-        </div>
-
+        <!-- Boxes inserted here with JavaScript -->
     </div>
 </div>
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<script>
+    // Create boxes along circle
+    const wheelElem = document.getElementById('wheel');
+    for (const symbol of symbols) {
+        const textContentElem = document.createTextNode(symbol);
+
+        const textContainerElem = document.createElement('div');
+        textContainerElem.classList.add('box-image');// textContainerElem.className = 'box-image';
+        textContainerElem.appendChild(textContentElem);
+
+        const outerBoxElem = document.createElement('div');
+        outerBoxElem.classList.add('box');// outerBoxElem.className = 'box';
+        outerBoxElem.appendChild(textContainerElem);
+        outerBoxElem.dataset.character = symbol;
+
+        wheelElem.appendChild(outerBoxElem);
+    }
+</script>
 
 <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
