@@ -53,7 +53,7 @@
             left: 0;
         }
 
-        .box-image {
+        .box-text {
             /* Contains the text for this slice */
             display: flex;
             align-items: center;
@@ -82,18 +82,26 @@
         }
 
         // Insert dynamic rules
+
+        // Outer box
         insertRule('#wheel', `width: ${wheelSize}px`)
         insertRule('#wheel', `height: ${wheelSize}px`)
+
+        // Background circle
         insertRule('#wheel-circle-background', `width: ${(radius * 2) + (boxSize)}px`)
         insertRule('#wheel-circle-background', `height: ${(radius * 2) + (boxSize)}px`)
         insertRule('#wheel-circle-background', `left: ${center - radius - (boxSize / 2)}px`)
         insertRule('#wheel-circle-background', `top: ${center - radius - (boxSize / 2)}px`)
         insertRule('#wheel-circle-background', `border-width: ${boxSize}px`)
+
+        // Boxes
         insertRule('.box', `width: ${boxSize}px`)
         insertRule('.box', `height: ${boxSize}px`)
-        insertRule('.box-image', `width: ${boxSize}px`)
-        insertRule('.box-image', `height: ${boxSize}px`)
-        insertRule('.box-image', `font-size: ${fontSize}`)
+
+        // Box text holder
+        insertRule('.box-text', `width: ${boxSize}px`)
+        insertRule('.box-text', `height: ${boxSize}px`)
+        insertRule('.box-text', `font-size: ${fontSize}`)
     </script>
 </head>
 <body>
@@ -117,7 +125,7 @@
         const textContentElem = document.createTextNode(symbol);
 
         const textContainerElem = document.createElement('div');
-        textContainerElem.classList.add('box-image');// textContainerElem.className = 'box-image';
+        textContainerElem.classList.add('box-text');// textContainerElem.className = 'box-text';
         textContainerElem.appendChild(textContentElem);
 
         const outerBoxElem = document.createElement('div');
