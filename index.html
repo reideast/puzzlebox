@@ -9,6 +9,10 @@
 
     <title>Puzzle Box - Lid</title>
 
+    <script>
+        const wheelSize = 1000;
+    </script>
+
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
     <style>
         html, body {
@@ -21,14 +25,10 @@
 
         #wheel {
             position: relative;
-            width: 1000px;
-            height: 1000px;
             outline: 1px solid red;
         }
 
         #wheel-image {
-            width: 1000px;
-            height: 1000px;
         }
 
         .box {
@@ -54,6 +54,28 @@
             background: cornflowerblue;
         }
     </style>
+
+    <script>
+        // Stylesheet rule insertion following guide of: https://stackoverflow.com/a/8630641/5271224
+        // Create style sheet inside <head>
+        const prevSize = document.styleSheets.length
+        const newElemStylesheet = document.createElement('style');
+        newElemStylesheet.type = 'text/css';
+        document.getElementsByTagName('head')[0].appendChild(newElemStylesheet);
+
+        // Retrieve the actual `styleSheet` object, use it as a closure in a function
+        const stylesheet = document.styleSheets[prevSize] // One more than previously existed
+        let insertionCount = 0;
+        function insertRule(selector, rule) {
+            stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
+        }
+
+        // Insert dynamic rules
+        insertRule('#wheel', `width: ${wheelSize}px`)
+        insertRule('#wheel', `height: ${wheelSize}px`)
+        insertRule('#wheel-image', `width: ${wheelSize}px`)
+        insertRule('#wheel-image', `height: ${wheelSize}px`)
+    </script>
 </head>
 <body>
 <div class="container-md">
