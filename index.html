@@ -9,24 +9,6 @@
 
     <title>Puzzle Box - Lid</title>
 
-    <script>
-        const wheels = [];
-
-        // calculate properties
-        let totalWidth = 740;
-        let centerPosition = totalWidth / 2;
-        let circleRadius = centerPosition * 0.85;
-        wheels.push({
-            wheelSize: totalWidth,
-            boxSize: 32,
-            fontSize:  '18px',
-            symbols:  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-
-            center: centerPosition, // Center is halfway across the diameter of the entire wheel element
-            radius: circleRadius, // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
-        })
-    </script>
-
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
     <style>
         html, body {
@@ -71,47 +53,6 @@
             background-color: rgba(0, 200, 200, 0.1); /* DEBUG */
         }
     </style>
-
-    <script>
-        // Stylesheet rule insertion following guide of: https://stackoverflow.com/a/8630641/5271224
-        // Create style sheet inside <head>
-        const prevSize = document.styleSheets.length
-        const newElemStylesheet = document.createElement('style');
-        newElemStylesheet.type = 'text/css';
-        document.getElementsByTagName('head')[0].appendChild(newElemStylesheet);
-
-        // Retrieve the actual `styleSheet` object, use it as a closure in a function
-        const stylesheet = document.styleSheets[prevSize] // One more than previously existed
-        let insertionCount = 0;
-        function insertRule(selector, rule) {
-            stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
-        }
-
-        // Insert dynamic rules for each wheel
-        for (let i = 0; i < wheels.length; i++) {
-            const currentWheel = wheels[i];
-
-            // Outer box
-            insertRule(`#wheel-${i}`, `width: ${currentWheel.wheelSize}px`)
-            insertRule(`#wheel-${i}`, `height: ${currentWheel.wheelSize}px`)
-
-            // Background circle
-            insertRule(`#wheel-circle-background-${i}`, `width: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
-            insertRule(`#wheel-circle-background-${i}`, `height: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
-            insertRule(`#wheel-circle-background-${i}`, `left: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
-            insertRule(`#wheel-circle-background-${i}`, `top: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
-            insertRule(`#wheel-circle-background-${i}`, `border-width: ${currentWheel.boxSize}px`)
-
-            // Boxes
-            insertRule(`.box-${i}`, `width: ${currentWheel.boxSize}px`)
-            insertRule(`.box-${i}`, `height: ${currentWheel.boxSize}px`)
-
-            // Box text holder
-            insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
-            insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
-            insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
-        }
-    </script>
 </head>
 <body>
 <div class="container-md">
@@ -127,12 +68,68 @@
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
+<!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script>
-    // Create boxes along circle
+    // Define the various code wheels
+    const wheels = [];
+
+    // calculate properties
+    let totalWidth = 740;
+    let centerPosition = totalWidth / 2;
+    let circleRadius = centerPosition * 0.85;
+    wheels.push({
+        wheelSize: totalWidth,
+        boxSize: 32,
+        fontSize:  '18px',
+        symbols:  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+
+        center: centerPosition, // Center is halfway across the diameter of the entire wheel element
+        radius: circleRadius, // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+    })
+
+
+    // Stylesheet rule insertion following guide of: https://stackoverflow.com/a/8630641/5271224
+    // Create style sheet inside <head>
+    const prevSize = document.styleSheets.length
+    const newElemStylesheet = document.createElement('style');
+    newElemStylesheet.type = 'text/css';
+    document.getElementsByTagName('head')[0].appendChild(newElemStylesheet);
+    // Retrieve the actual `styleSheet` object, use it as a closure in a function
+    const stylesheet = document.styleSheets[prevSize] // One more than previously existed
+    let insertionCount = 0;
+    function insertRule(selector, rule) {
+        stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
+    }
+
+
+    // Create a wheel for each one defined above
     for (let i = 0; i < wheels.length; i++) {
         const currentWheel = wheels[i];
 
-        const wheelElem = document.getElementById('wheel-0');
+        // Insert dynamic CSS rules for each wheel
+        // Outer box
+        insertRule(`#wheel-${i}`, `width: ${currentWheel.wheelSize}px`)
+        insertRule(`#wheel-${i}`, `height: ${currentWheel.wheelSize}px`)
+        // Background circle
+        insertRule(`#wheel-circle-background-${i}`, `width: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
+        insertRule(`#wheel-circle-background-${i}`, `height: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
+        insertRule(`#wheel-circle-background-${i}`, `left: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
+        insertRule(`#wheel-circle-background-${i}`, `top: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
+        insertRule(`#wheel-circle-background-${i}`, `border-width: ${currentWheel.boxSize}px`)
+        // Boxes
+        insertRule(`.box-${i}`, `width: ${currentWheel.boxSize}px`)
+        insertRule(`.box-${i}`, `height: ${currentWheel.boxSize}px`)
+        // Box text holder
+        insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
+        insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
+        insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
+
+
+        // Create boxes along circle
+        const wheelContainer = document.getElementById(`wheel-${i}`)
         for (const symbol of currentWheel.symbols) {
             const textContentElem = document.createTextNode(symbol);
 
@@ -146,20 +143,12 @@
             outerBoxElem.appendChild(textContainerElem);
             outerBoxElem.dataset.character = symbol;
 
-            wheelElem.appendChild(outerBoxElem);
+            wheelContainer.appendChild(outerBoxElem);
         }
-    }
-</script>
 
-<!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
-<script>
-    for (let i = 0; i < wheels.length; i++) {
-        const currentWheel = wheels[i];
 
-        const wheelElem = document.getElementById(`wheel-${i}`)
+        // Position the boxes with code characters in them using GSAP's Tween plugin
+        // Method from Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67
         let boxes = $(`.box-${i}`);
 
         let total = boxes.length;
@@ -181,7 +170,9 @@
             });
         });
 
-        Draggable.create(wheelElem, {
+
+        // Define a GSAP Draggable for this wheel
+        Draggable.create(wheelContainer, {
             type: 'rotation',
             minimumMovement: 10,
             dragClickables: true,
