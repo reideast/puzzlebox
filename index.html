@@ -74,11 +74,11 @@
         insertRule('#wheel', `height: ${wheelSize}px`)
         insertRule('#wheel-image', `width: ${wheelSize}px`)
         insertRule('#wheel-image', `height: ${wheelSize}px`)
-        insertRule(".box", `width: ${boxSize}px`)
-        insertRule(".box", `height: ${boxSize}px`)
-        insertRule(".box-image", `width: ${boxSize}px`)
-        insertRule(".box-image", `height: ${boxSize}px`)
-        insertRule(".box-image", `font-size: ${fontSize}`)
+        insertRule('.box', `width: ${boxSize}px`)
+        insertRule('.box', `height: ${boxSize}px`)
+        insertRule('.box-image', `width: ${boxSize}px`)
+        insertRule('.box-image', `height: ${boxSize}px`)
+        insertRule('.box-image', `font-size: ${fontSize}`)
     </script>
 </head>
 <body>
@@ -171,23 +171,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script>
-    var wheel = $("#wheel");
-    var boxes = $(".box");
+    let wheel = $('#wheel');
+    let boxes = $('.box');
 
-    var center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
-    var radius = center - (boxSize * 1.2); // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
-    var total  = boxes.length;
-    var slice  = 2 * Math.PI / total;
+    let center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
+    let radius = center - (boxSize * 1.2); // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+    let total  = boxes.length;
+    let slice  = 2 * Math.PI / total;
 
     boxes.each(function(i, box) {
 
-        var angle = i * slice;
+        let angle = i * slice;
 
-        var x = center + radius * Math.sin(angle);
-        var y = center - radius * Math.cos(angle);
+        let x = center + radius * Math.sin(angle);
+        let y = center - radius * Math.cos(angle);
 
         TweenLite.set(box, {
-            rotation: angle + "_rad",
+            rotation: angle + '_rad',
             xPercent: -50,
             yPercent: -50,
             x: x,
@@ -196,7 +196,7 @@
     });
 
     Draggable.create(wheel, {
-        type: "rotation",
+        type: 'rotation',
         minimumMovement: 10,
         dragClickables: true
     });
