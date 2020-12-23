@@ -10,15 +10,21 @@
     <title>Puzzle Box - Lid</title>
 
     <script>
-        // Circle constant properties
-        const wheelSize = 740;
-        const boxSize = 32;
-        const fontSize = '18px';
-        const symbols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        const wheels = [];
 
-        // Circle calculated properties
-        let center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
-        let radius = center * 0.85; // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+        // calculate properties
+        let totalWidth = 740;
+        let centerPosition = totalWidth / 2;
+        let circleRadius = centerPosition * 0.85;
+        wheels.push({
+            wheelSize: totalWidth,
+            boxSize: 32,
+            fontSize:  '18px',
+            symbols:  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+
+            center: centerPosition, // Center is halfway across the diameter of the entire wheel element
+            radius: circleRadius, // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+        })
     </script>
 
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
@@ -31,13 +37,13 @@
             overflow: scroll;
         }
 
-        #wheel {
+        #wheel-0 {
             /* Must be set to a defined size (by JavaScript) */
             position: relative;
             outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
         }
 
-        #wheel-circle-background {
+        #wheel-circle-background-0 {
             /* Must be set to a defined size (by JavaScript) */
             background-color: blue;
             border-style: solid;
@@ -47,13 +53,13 @@
             position: relative; /* left & top set dynamically */
         }
 
-        .box {
+        .box-0 {
             position: absolute;
             top: 0;
             left: 0;
         }
 
-        .box-text {
+        .box-text-0 {
             /* Contains the text for this slice */
             display: flex;
             align-items: center;
@@ -81,35 +87,38 @@
             stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
         }
 
-        // Insert dynamic rules
+        // Insert dynamic rules for each wheel
+        for (let i = 0; i < wheels.length; i++) {
+            const currentWheel = wheels[i];
 
-        // Outer box
-        insertRule('#wheel', `width: ${wheelSize}px`)
-        insertRule('#wheel', `height: ${wheelSize}px`)
+            // Outer box
+            insertRule(`#wheel-${i}`, `width: ${currentWheel.wheelSize}px`)
+            insertRule(`#wheel-${i}`, `height: ${currentWheel.wheelSize}px`)
 
-        // Background circle
-        insertRule('#wheel-circle-background', `width: ${(radius * 2) + (boxSize)}px`)
-        insertRule('#wheel-circle-background', `height: ${(radius * 2) + (boxSize)}px`)
-        insertRule('#wheel-circle-background', `left: ${center - radius - (boxSize / 2)}px`)
-        insertRule('#wheel-circle-background', `top: ${center - radius - (boxSize / 2)}px`)
-        insertRule('#wheel-circle-background', `border-width: ${boxSize}px`)
+            // Background circle
+            insertRule(`#wheel-circle-background-${i}`, `width: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
+            insertRule(`#wheel-circle-background-${i}`, `height: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
+            insertRule(`#wheel-circle-background-${i}`, `left: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
+            insertRule(`#wheel-circle-background-${i}`, `top: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
+            insertRule(`#wheel-circle-background-${i}`, `border-width: ${currentWheel.boxSize}px`)
 
-        // Boxes
-        insertRule('.box', `width: ${boxSize}px`)
-        insertRule('.box', `height: ${boxSize}px`)
+            // Boxes
+            insertRule(`.box-${i}`, `width: ${currentWheel.boxSize}px`)
+            insertRule(`.box-${i}`, `height: ${currentWheel.boxSize}px`)
 
-        // Box text holder
-        insertRule('.box-text', `width: ${boxSize}px`)
-        insertRule('.box-text', `height: ${boxSize}px`)
-        insertRule('.box-text', `font-size: ${fontSize}`)
+            // Box text holder
+            insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
+            insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
+            insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
+        }
     </script>
 </head>
 <body>
 <div class="container-md">
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
-    <div id="wheel">
+    <div id="wheel-0">
 
-        <div id="wheel-circle-background" class="draggable-handle"></div>
+        <div id="wheel-circle-background-0" class="draggable-handle-0"></div>
 
         <!-- Boxes inserted here with JavaScript -->
     </div>
@@ -120,21 +129,25 @@
 
 <script>
     // Create boxes along circle
-    const wheelElem = document.getElementById('wheel');
-    for (const symbol of symbols) {
-        const textContentElem = document.createTextNode(symbol);
+    for (let i = 0; i < wheels.length; i++) {
+        const currentWheel = wheels[i];
 
-        const textContainerElem = document.createElement('div');
-        textContainerElem.classList.add('box-text');// textContainerElem.className = 'box-text';
-        textContainerElem.classList.add('draggable-handle');
-        textContainerElem.appendChild(textContentElem);
+        const wheelElem = document.getElementById('wheel-0');
+        for (const symbol of currentWheel.symbols) {
+            const textContentElem = document.createTextNode(symbol);
 
-        const outerBoxElem = document.createElement('div');
-        outerBoxElem.classList.add('box');// outerBoxElem.className = 'box';
-        outerBoxElem.appendChild(textContainerElem);
-        outerBoxElem.dataset.character = symbol;
+            const textContainerElem = document.createElement('div');
+            textContainerElem.classList.add(`box-text-${i}`);// textContainerElem.className = 'box-text';
+            textContainerElem.classList.add(`draggable-handle-${i}`);
+            textContainerElem.appendChild(textContentElem);
 
-        wheelElem.appendChild(outerBoxElem);
+            const outerBoxElem = document.createElement('div');
+            outerBoxElem.classList.add(`box-${i}`);// outerBoxElem.className = 'box';
+            outerBoxElem.appendChild(textContainerElem);
+            outerBoxElem.dataset.character = symbol;
+
+            wheelElem.appendChild(outerBoxElem);
+        }
     }
 </script>
 
@@ -143,34 +156,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script>
-    let wheel = $('#wheel');
-    let boxes = $('.box');
+    for (let i = 0; i < wheels.length; i++) {
+        const currentWheel = wheels[i];
 
-    let total  = boxes.length;
-    let slice  = 2 * Math.PI / total;
+        const wheelElem = document.getElementById(`wheel-${i}`)
+        let boxes = $(`.box-${i}`);
 
-    boxes.each(function(i, box) {
+        let total = boxes.length;
+        let slice = 2 * Math.PI / total;
 
-        let angle = i * slice;
+        boxes.each(function (i, box) {
 
-        let x = center + radius * Math.sin(angle);
-        let y = center - radius * Math.cos(angle);
+            let angle = i * slice;
 
-        TweenLite.set(box, {
-            rotation: angle + '_rad',
-            xPercent: -50,
-            yPercent: -50,
-            x: x,
-            y: y
+            let x = currentWheel.center + currentWheel.radius * Math.sin(angle);
+            let y = currentWheel.center - currentWheel.radius * Math.cos(angle);
+
+            TweenLite.set(box, {
+                rotation: angle + '_rad',
+                xPercent: -50,
+                yPercent: -50,
+                x: x,
+                y: y
+            });
         });
-    });
 
-    Draggable.create(wheel, {
-        type: 'rotation',
-        minimumMovement: 10,
-        dragClickables: true,
-        trigger: ".draggable-handle"
-    });
+        Draggable.create(wheelElem, {
+            type: 'rotation',
+            minimumMovement: 10,
+            dragClickables: true,
+            trigger: `.draggable-handle-${i}`
+        });
+    }
 </script>
 </body>
 </html>
