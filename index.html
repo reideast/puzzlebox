@@ -268,11 +268,18 @@
 
 
         // Define a GSAP Draggable for this wheel
+        const SLICE_IN_DEGREES = currentWheel.slice * 180 / Math.PI; // The arc length of a single slice of the wheel, converted to degrees
         Draggable.create(wheelContainerElem, {
             type: 'rotation',
             minimumMovement: 10,
             dragClickables: true,
-            trigger: `.draggable-handle-${i}`
+            trigger: `.draggable-handle-${i}`, // Trigger is a selector that limits which part of the element's subtree because the clickable drag handles
+            liveSnap: {
+                rotation: function(value) {
+                    // snap to the closest slice
+                    return Math.round(value / SLICE_IN_DEGREES) * SLICE_IN_DEGREES;
+                }
+            },
         });
     }
 </script>
