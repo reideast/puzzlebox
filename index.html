@@ -55,14 +55,8 @@
     </style>
 </head>
 <body>
-<div class="container-md">
-    <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
-    <div id="wheel-0">
-
-        <div id="wheel-circle-background-0" class="draggable-handle-0"></div>
-
-        <!-- Boxes inserted here with JavaScript -->
-    </div>
+<div id="container-wheels" class="container-md">
+    <!-- Wheels inserted here with JavaScript -->
 </div>
 
 <!-- Bootstrap Bundle with Popper -->
@@ -108,8 +102,8 @@
         stylesheet.insertRule(selector +' { ' + rule + ' }', insertionCount++);
     }
 
-
     // Create a wheel for each one defined above
+    const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
     for (let i = 0; i < wheels.length; i++) {
         const currentWheel = wheels[i];
 
@@ -132,8 +126,19 @@
         insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
 
 
+        // Create outer container for this wheel
+        const wheelContainerElem = document.createElement('div');
+        wheelContainerElem.id = `wheel-${i}`;
+        containerElem.appendChild(wheelContainerElem);
+
+        // Create the background circle
+        const circleBackgroundElem = document.createElement('div');
+        circleBackgroundElem.id = `wheel-circle-background-${i}`;
+        circleBackgroundElem.classList.add(`draggable-handle-${i}`);
+        wheelContainerElem.appendChild(circleBackgroundElem);
+
+
         // Create boxes along circle
-        const wheelContainer = document.getElementById(`wheel-${i}`)
         for (const symbol of currentWheel.symbols) {
             const textContentElem = document.createTextNode(symbol);
 
@@ -147,7 +152,7 @@
             outerBoxElem.appendChild(textContainerElem);
             outerBoxElem.dataset.character = symbol;
 
-            wheelContainer.appendChild(outerBoxElem);
+            wheelContainerElem.appendChild(outerBoxElem);
         }
 
 
@@ -171,7 +176,7 @@
 
 
         // Define a GSAP Draggable for this wheel
-        Draggable.create(wheelContainer, {
+        Draggable.create(wheelContainerElem, {
             type: 'rotation',
             minimumMovement: 10,
             dragClickables: true,
