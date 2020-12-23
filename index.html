@@ -10,10 +10,15 @@
     <title>Puzzle Box - Lid</title>
 
     <script>
+        // Circle constant properties
         const wheelSize = 740;
         const boxSize = 32;
         const fontSize = '18px';
         const symbols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+        // Circle calculated properties
+        let center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
+        let radius = center * 0.85; // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
     </script>
 
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
@@ -32,7 +37,14 @@
             outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
         }
 
-        #wheel-image {
+        #wheel-circle-background {
+            /* Must be set to a defined size (by JavaScript) */
+            background-color: blue;
+            border-style: solid;
+            border-color: cornflowerblue; /* DEBUG */
+            /* border-width is set dynamically */
+            border-radius: 50%; /* Makes this into a circle */
+            position: relative; /* left & top set dynamically */
         }
 
         .box {
@@ -46,7 +58,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: cornflowerblue;
+            background: cornflowerblue; /* DEBUG */
         }
 
         .container-md {
@@ -72,8 +84,11 @@
         // Insert dynamic rules
         insertRule('#wheel', `width: ${wheelSize}px`)
         insertRule('#wheel', `height: ${wheelSize}px`)
-        insertRule('#wheel-image', `width: ${wheelSize}px`)
-        insertRule('#wheel-image', `height: ${wheelSize}px`)
+        insertRule('#wheel-circle-background', `width: ${(radius * 2) + (boxSize)}px`)
+        insertRule('#wheel-circle-background', `height: ${(radius * 2) + (boxSize)}px`)
+        insertRule('#wheel-circle-background', `left: ${center - radius - (boxSize / 2)}px`)
+        insertRule('#wheel-circle-background', `top: ${center - radius - (boxSize / 2)}px`)
+        insertRule('#wheel-circle-background', `border-width: ${boxSize}px`)
         insertRule('.box', `width: ${boxSize}px`)
         insertRule('.box', `height: ${boxSize}px`)
         insertRule('.box-image', `width: ${boxSize}px`)
@@ -86,7 +101,7 @@
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
     <div id="wheel">
 
-        <img id="wheel-image" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/compass3.png" alt="" />
+        <div id="wheel-circle-background"></div>
 
         <!-- Boxes inserted here with JavaScript -->
     </div>
@@ -122,8 +137,6 @@
     let wheel = $('#wheel');
     let boxes = $('.box');
 
-    let center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
-    let radius = center * 0.85; // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
     let total  = boxes.length;
     let slice  = 2 * Math.PI / total;
 
