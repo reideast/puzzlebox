@@ -10,9 +10,9 @@
     <title>Puzzle Box - Lid</title>
 
     <script>
-        const wheelSize = 1000;
-        const boxSize = 64;
-        const fontSize = '24px';
+        const wheelSize = 740;
+        const boxSize = 32;
+        const fontSize = '18px';
     </script>
 
     <!-- From Green Socks codepen: https://codepen.io/osublake/pen/e86dc71e2406793fb7b899b73f881f67 -->
@@ -28,7 +28,7 @@
         #wheel {
             /* Must be set to a defined size (by JavaScript) */
             position: relative;
-            outline: 1px solid red;
+            outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
         }
 
         #wheel-image {
@@ -36,7 +36,6 @@
 
         .box {
             position: absolute;
-            border: 4px solid black;
             top: 0;
             left: 0;
         }
@@ -47,6 +46,10 @@
             align-items: center;
             justify-content: center;
             background: cornflowerblue;
+        }
+
+        .container-md {
+            background-color: rgba(0, 200, 200, 0.1); /* DEBUG */
         }
     </style>
 
@@ -147,7 +150,7 @@
     let boxes = $('.box');
 
     let center = wheelSize / 2; // Center is halfway across the diameter of the entire wheel element
-    let radius = center - (boxSize * 1.2); // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
+    let radius = center * 0.85; // Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
     let total  = boxes.length;
     let slice  = 2 * Math.PI / total;
 
