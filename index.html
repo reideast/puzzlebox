@@ -19,8 +19,8 @@
             overflow: scroll;
         }
 
-        .wheel-container {
-            position: relative;
+        .wheel {
+            position: absolute;
             outline: 1px solid rgba(255, 0, 0, 0.2); /* DEBUG */
             pointer-events: none; /* Will "pass through" any clicks/taps to elements underneith in z-order */
         }
@@ -46,8 +46,9 @@
             justify-content: center;
         }
 
-        .container-md {
+        #container-wheels {
             background-color: rgba(0, 200, 200, 0.1); /* DEBUG */
+            position: relative;
         }
     </style>
 </head>
@@ -71,6 +72,8 @@
     let newWheelObject = {
         symbols:  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         fontSize:  '18px',
+        ringColor: 'cornflowerblue',
+        innerColor: 'blue',
 
         wheelSize: 740, // Total width of the container square
         boxSize: 32, // Size of boxes that contain the symbols
@@ -84,6 +87,8 @@
     newWheelObject.slice = 2 * Math.PI / newWheelObject.symbols.length;
 
     wheels.push(newWheelObject)
+
+    const CENTER_AXIS = wheels[0].center; // Save the center of the largest wheel. Later, all wheels will be positioned around this
 
 
     // Stylesheet rule insertion following guide of: https://stackoverflow.com/a/8630641/5271224
@@ -108,14 +113,16 @@
         // Outer box
         insertRule(`#wheel-${i}`, `width: ${currentWheel.wheelSize}px`)
         insertRule(`#wheel-${i}`, `height: ${currentWheel.wheelSize}px`)
+        insertRule(`#wheel-${i}`, `left: ${(CENTER_AXIS - (currentWheel.wheelSize / 2))}px`)
+        insertRule(`#wheel-${i}`, `top: ${(CENTER_AXIS - (currentWheel.wheelSize / 2))}px`)
         // Background circle
         insertRule(`#wheel-circle-background-${i}`, `width: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
         insertRule(`#wheel-circle-background-${i}`, `height: ${(currentWheel.radius * 2) + (currentWheel.boxSize)}px`)
         insertRule(`#wheel-circle-background-${i}`, `left: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
         insertRule(`#wheel-circle-background-${i}`, `top: ${currentWheel.center - currentWheel.radius - (currentWheel.boxSize / 2)}px`)
         insertRule(`#wheel-circle-background-${i}`, `border-width: ${currentWheel.boxSize}px`)
-        insertRule(`#wheel-circle-background-${i}`, 'background-color: blue')
-        insertRule(`#wheel-circle-background-${i}`, 'border-color: cornflowerblue') // DEBUG
+        insertRule(`#wheel-circle-background-${i}`, `background-color: ${currentWheel.innerColor}`)
+        insertRule(`#wheel-circle-background-${i}`, `border-color: ${currentWheel.ringColor}`)
         // Boxes
         insertRule(`.box-${i}`, `width: ${currentWheel.boxSize}px`)
         insertRule(`.box-${i}`, `height: ${currentWheel.boxSize}px`)
@@ -123,13 +130,13 @@
         insertRule(`.box-text-${i}`, `width: ${currentWheel.boxSize}px`)
         insertRule(`.box-text-${i}`, `height: ${currentWheel.boxSize}px`)
         insertRule(`.box-text-${i}`, `font-size: ${currentWheel.fontSize}`)
-        insertRule(`.box-text-${i}`, 'background: cornflowerblue') // DEBUG
+        insertRule(`.box-text-${i}`, `background: ${currentWheel.ringColor}`)
 
 
         // Create outer container for this wheel
         const wheelContainerElem = document.createElement('div');
         wheelContainerElem.id = `wheel-${i}`;
-        wheelContainerElem.classList.add('wheel-container')
+        wheelContainerElem.classList.add('wheel')
         containerElem.appendChild(wheelContainerElem);
 
         // Create the background circle
