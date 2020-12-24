@@ -82,8 +82,8 @@
             position: relative;
         }
 
-        #container-keywords {
-            margin: 10px 0;
+        #container-ciphertext, #container-keywords, #container-plaintext {
+            margin: 20px 0;
         }
 
         .keyword-letter {
@@ -104,6 +104,14 @@
         .keyword-letter:disabled {
             background-color: white; /* Override the disabled appearance */
         }
+
+        .text-cipher, .text-plain {
+            width: 100%;
+        }
+
+        .text-plain {
+            background-color: white;
+        }
     </style>
 </head>
 <body>
@@ -113,8 +121,14 @@
     <div id="selected-letters-encircled"><div id="selected-letters-pointer"></div></div>
 </div>
 <div id="container-codes" class="container-fluid">
+    <div id="container-ciphertext">
+        <input type="text" name="text-cipher" id="text-cipher" class="text-cipher">
+    </div>
     <div id="container-keywords">
         <!-- Keyword letters inserted here with JavaScript -->
+    </div>
+    <div id="container-plaintext">
+        <input type="text" name="text-plain" id="text-plain" class="text-plain" disabled="disabled">
     </div>
 </div>
 
@@ -258,8 +272,8 @@
         keywordLetterElem.disabled = true;
         keywordLetterElem.classList.add('keyword-letter')
         keywordLetterElem.value = currentWheel.symbols[0];
-        keywordLetter.push(currentWheel.symbols[0]);
-        keywordLetterElems.push(keywordLetterElem);
+        keywordLetter.push(currentWheel.symbols[0]); // Init the array of characters that stores the actual keyword
+        keywordLetterElems.push(keywordLetterElem); // Save this elem in an ordered array for future use
         keywordElem.appendChild(keywordLetterElem);
 
         // Create outer container for this wheel
