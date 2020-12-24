@@ -142,15 +142,52 @@
 <script>
     // Define the various code wheels and other items that will be referenced later
     const wheels = [];
-    const keywordLetter = [];
+    const keywordCharCodes = [];
     const keywordLetterElems = [];
     const ciphertextElem = document.getElementById("text-cipher");
     const plaintextElem = document.getElementById("text-plain");
 
-    // Triggered by any of the array of keyword letters text boxes updating
-    function keywordUpdated() {
-        console.debug(keywordLetter.join('')); // DEBUG
-        // TODO: decrypt
+    ciphertextElem.addEventListener('input', cipherUpdated);
+
+    // Triggered by either the ciphertext updating or any of the array of keyword letters text boxes updating
+    function cipherUpdated() {
+        console.debug(keywordCharCodes.join(',')); // DEBUG
+        const ciphertext = ciphertextElem.value;
+        const decrypted = [];
+        for (let i = 0; i < ciphertext.length; i++) {
+            decrypted.push(decryptChar(ciphertext.charCodeAt(i), i));
+        }
+        plaintextElem.value = decrypted.join('');
+    }
+
+    // Vigenere decryption per character
+    function decryptChar(cipherCharCode, index) {
+        let decryptedCharCode;
+        if (cipherCharCode >= 65 && cipherCharCode <= 90) { // [A-Z]
+            // let zeroIndexedLetter = cipherCharCode - 65;
+            // let keywordIndexModded = index % keywordCharCodes.length;
+            // let keywordCharCode = keywordCharCodes[keywordIndexModded];
+            // let decryptedZeroIndexed = (zeroIndexedLetter - keywordCharCode + 26) % 26;
+            // decryptedCharCode = decryptedZeroIndexed + 65;
+            // console.log(zeroIndexedLetter, keywordIndexModded, keywordCharCode, decryptedZeroIndexed, decryptedCharCode); // DEBUG
+
+            // decryptedCharCode = ((cipherCharCode - 65) - keywordCharCodes[index % keywordCharCodes.length] + 26) % 26 + 65;
+
+            decryptedCharCode = decryptAlphabetIndexedChar((cipherCharCode - 65), keywordCharCodes[index % keywordCharCodes.length]) + 65;
+        } else if (cipherCharCode >= 97 && cipherCharCode <= 122) { // [a-z]
+            // decryptedCharCode = ((cipherCharCode - 97) - keywordCharCodes[index % keywordCharCodes.length] + 26) % 26 + 97;
+
+            decryptedCharCode = decryptAlphabetIndexedChar((cipherCharCode - 97), keywordCharCodes[index % keywordCharCodes.length]) + 97;
+        } else {
+            // Pass through any non-alphabetic characters
+            decryptedCharCode = cipherCharCode;
+        }
+        console.log(cipherCharCode, "-->", decryptedCharCode); // DEBUG
+        return String.fromCharCode(decryptedCharCode);
+    }
+
+    function decryptAlphabetIndexedChar(cipherAlphabetIndexed, keyAlphabetIndexed) {
+        return (cipherAlphabetIndexed - keyAlphabetIndexed + 26) % 26;
     }
 
     function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize) {
@@ -280,10 +317,10 @@
         keywordLetterElem.disabled = true;
         keywordLetterElem.classList.add('keyword-letter')
         keywordLetterElem.value = currentWheel.symbols[0];
-        keywordLetter.push(currentWheel.symbols[0]); // Init the array of characters that stores the actual keyword
+        keywordCharCodes.push(currentWheel.symbols[0].charCodeAt(0) - 65); // Init the array of characters that stores the actual keyword (minus 'A')
         keywordLetterElems.push(keywordLetterElem); // Save this elem in an ordered array for future use
         keywordElem.appendChild(keywordLetterElem);
-        keywordLetterElem.addEventListener('input', keywordUpdated); // Called whenever the keyword character is updated. Does decryption
+        keywordLetterElem.addEventListener('input', cipherUpdated); // Called whenever the keyword character is updated. Does decryption
 
         // Create outer container for this wheel
         const wheelContainerElem = document.createElement('div');
@@ -351,10 +388,10 @@
                 rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 
                 const symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
-                const previousValue = keywordLetter[i];
-                keywordLetter[i] = currentWheel.symbols[symbolIndex];
+                const previousValue = keywordCharCodes[i];
+                keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
                 keywordLetterElems[i].value = currentWheel.symbols[symbolIndex];
-                if (previousValue !== keywordLetter[i]) {
+                if (previousValue !== keywordCharCodes[i]) { // Only fire event handling fn if the value actually changed (debouncing for efficiency)
                     keywordLetterElems[i].dispatchEvent(new Event('input'));
                 }
             }
