@@ -144,6 +144,14 @@
     const wheels = [];
     const keywordLetter = [];
     const keywordLetterElems = [];
+    const ciphertextElem = document.getElementById("text-cipher");
+    const plaintextElem = document.getElementById("text-plain");
+
+    // Triggered by any of the array of keyword letters text boxes updating
+    function keywordUpdated() {
+        console.debug(keywordLetter.join('')); // DEBUG
+        // TODO: decrypt
+    }
 
     function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize) {
         return {
@@ -275,6 +283,7 @@
         keywordLetter.push(currentWheel.symbols[0]); // Init the array of characters that stores the actual keyword
         keywordLetterElems.push(keywordLetterElem); // Save this elem in an ordered array for future use
         keywordElem.appendChild(keywordLetterElem);
+        keywordLetterElem.addEventListener('input', keywordUpdated); // Called whenever the keyword character is updated. Does decryption
 
         // Create outer container for this wheel
         const wheelContainerElem = document.createElement('div');
@@ -341,9 +350,13 @@
                 rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
                 rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 
-                let symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
+                const symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
+                const previousValue = keywordLetter[i];
                 keywordLetter[i] = currentWheel.symbols[symbolIndex];
                 keywordLetterElems[i].value = currentWheel.symbols[symbolIndex];
+                if (previousValue !== keywordLetter[i]) {
+                    keywordLetterElems[i].dispatchEvent(new Event('input'));
+                }
             }
         });
     }
