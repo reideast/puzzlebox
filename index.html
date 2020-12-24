@@ -349,6 +349,12 @@
     insertRule('#hub-circle-snowflake', `height: ${hubRadius * 2}px`);
     insertRule('#hub-circle-snowflake', `left: ${hubBorderSize / 2}px`);
     insertRule('#hub-circle-snowflake', `top: ${hubBorderSize / 2}px`);
+    hubBackgroundElem.addEventListener('click', function(e) {
+        console.debug("Current code is: " + keywordCharCodes.map(c => String.fromCharCode(c + 65)).join('')); // DEBUG
+        if (keywordCharCodes.join('') === "18013190") {
+            alert("code broken")
+        }
+    });
 
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
