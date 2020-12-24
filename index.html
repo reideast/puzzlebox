@@ -81,6 +81,29 @@
             max-width: 540px;
             position: relative;
         }
+
+        #container-keywords {
+            margin: 10px 0;
+        }
+
+        .keyword-letter {
+            margin: 0 2px;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            border: 2px solid goldenrod;
+            border-radius: 50%;
+            text-align: center;
+            padding: 2px 0;
+            font-size: 14px;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        .keyword-letter:disabled {
+            background-color: white; /* Override the disabled appearance */
+        }
     </style>
 </head>
 <body>
@@ -195,7 +218,7 @@
     insertRule('#selected-letters-encircled', `width: ${FONT_LARGEST * 1.35}px`)
     insertRule('#selected-letters-encircled', `top: ${CENTER_AXIS * 0.065}px`)
     insertRule('#selected-letters-encircled', `left: ${CENTER_AXIS - ((FONT_LARGEST * 1.35) / 2)}px`)
-    insertRule('#selected-letters-encircled', 'display: block')
+    insertRule('#selected-letters-encircled', 'display: block') // Return box to default state, un-hiding it
 
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
@@ -232,7 +255,8 @@
         keywordLetterElem.type = 'text';
         keywordLetterElem.id = `code-keyword-${i}`;
         keywordLetterElem.name = `code-keyword-${i}`;
-        keywordLetterElem.style.width = `${FONT_LARGEST}px`
+        keywordLetterElem.disabled = true;
+        keywordLetterElem.classList.add('keyword-letter')
         keywordLetterElem.value = currentWheel.symbols[0];
         keywordLetter.push(currentWheel.symbols[0]);
         keywordLetterElems.push(keywordLetterElem);
