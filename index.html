@@ -56,6 +56,26 @@
             max-width: 540px;
         }
 
+        #hub-container {
+            position: absolute;
+            pointer-events: none; /* Will "pass through" any clicks/taps to elements underneath in z-order */
+        }
+
+        #hub-circle-background {
+            border-radius: 50%; /* Makes this into a circle */
+            position: relative; /* left & top set dynamically */
+            pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
+            background-color: #4fbac8;
+            border-color: #4fbac8;
+        }
+
+        #hub-circle-snowflake {
+            /*   Christmas snowflake by ProSymbols from the Noun Project https://thenounproject.com/search/?q=snowflake&i=2143715 */
+            content:url("snowflake.png");
+            position: relative;
+        }
+
+
         #selected-letters-encircled {
             border: 3px solid goldenrod;
             border-radius: 10px;
@@ -301,6 +321,35 @@
     insertRule('#selected-letters-encircled', `left: ${CENTER_AXIS - ((FONT_LARGEST * 1.35) / 2)}px`)
     insertRule('#selected-letters-encircled', 'display: block') // Return box to default state, un-hiding it
 
+
+    // Create outer container for the middle hub of the wheel
+    const hubContainerElem = document.createElement('div');
+    hubContainerElem.id = 'hub-container';
+    let hubWidth = FULL_WIDTH * 1/6;
+    let hubCenter = hubWidth / 2;
+    let hubRadius = (hubWidth / 2) * 0.85;
+    let hubBorderSize = FULL_WIDTH / 16;
+    insertRule('#hub-container', `width: ${hubWidth}px`);
+    insertRule('#hub-container', `height: ${hubWidth}px`);
+    insertRule('#hub-container', `left: ${(CENTER_AXIS - (hubWidth / 2))}px`);
+    insertRule('#hub-container', `top: ${(CENTER_AXIS - (hubWidth / 2))}px`);
+    // Create the background circle of the middle of the wheel
+    const hubBackgroundElem = document.createElement('div');
+    hubBackgroundElem.id = 'hub-circle-background';
+    hubContainerElem.appendChild(hubBackgroundElem);
+    insertRule('#hub-circle-background', `width: ${(hubRadius * 2) + (hubBorderSize)}px`);
+    insertRule('#hub-circle-background', `height: ${(hubRadius * 2) + (hubBorderSize)}px`);
+    insertRule('#hub-circle-background', `left: ${hubCenter - hubRadius - (hubBorderSize / 2)}px`);
+    insertRule('#hub-circle-background', `top: ${hubCenter - hubRadius - (hubBorderSize / 2)}px`);
+    insertRule('#hub-circle-background', `border-width: ${hubBorderSize}px`)
+    const hubImageElem = document.createElement('div');
+    hubImageElem.id = 'hub-circle-snowflake';
+    hubBackgroundElem.appendChild(hubImageElem);
+    insertRule('#hub-circle-snowflake', `width: ${hubRadius * 2}px`);
+    insertRule('#hub-circle-snowflake', `height: ${hubRadius * 2}px`);
+    insertRule('#hub-circle-snowflake', `left: ${hubBorderSize / 2}px`);
+    insertRule('#hub-circle-snowflake', `top: ${hubBorderSize / 2}px`);
+
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
     const keywordElem = document.getElementById('container-keywords'); // Contains the keyword text boxes
@@ -428,6 +477,9 @@
         draggable[0].update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
         onDrag.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
     }
+
+    // Append the hub to the center of the wheel. (Done down below here so the z-index matches where it is logically in the DOM)
+    containerElem.appendChild(hubContainerElem);
 </script>
 </body>
 </html>
