@@ -51,7 +51,7 @@
         }
 
         #container-wheels {
-            background-color: rgba(0, 200, 200, 0.1); /* DEBUG */
+            /*background-color: rgba(0, 200, 200, 0.1); !* DEBUG *!*/
             position: relative;
             max-width: 540px;
         }
@@ -91,19 +91,29 @@
             margin: 20px 0;
         }
 
+        #container-ciphertext input[type=text], #container-plaintext input[type=text] {
+            text-align: center;
+            border-color: #76c9d4;
+        }
+
+        #container-keywords {
+            text-align: center;
+        }
+
         .keyword-letter {
-            margin: 0 2px;
-            width: 24px;
-            height: 24px;
-            line-height: 24px;
+            margin: 0 5px;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
             border: 2px solid goldenrod;
             border-radius: 50%;
             text-align: center;
             padding: 2px 0;
-            font-size: 14px;
+            font-size: 18px;
             color: #333;
             font-family: 'Xanh Mono', monospace;
             font-weight: bold;
+            display: inline-block; /* Makes them respect text-align:center */
         }
 
         .keyword-letter:disabled {
@@ -116,7 +126,8 @@
         }
 
         .text-plain {
-            background-color: white;
+            background-color: #c3e8ec;
+            color: #222;
         }
 
         .narrative-text {
@@ -225,7 +236,7 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST, '#006767', 'black',
+            FONT_LARGEST, '#9dd8e0', '#76c9d4',
             FULL_WIDTH * 6/6, WHEEL_WIDTH
         )
     )
@@ -236,7 +247,7 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 1, '#008080', 'black',
+            FONT_LARGEST - 1, '#b0e0e6', '#76c9d4',
             FULL_WIDTH * 5/6, WHEEL_WIDTH
         )
     )
@@ -244,7 +255,7 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 2, '#009a9a', 'black',
+            FONT_LARGEST - 2, '#c3e8ec', '#76c9d4',
             FULL_WIDTH * 4/6, WHEEL_WIDTH
         )
     )
@@ -252,7 +263,7 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 3, '#00b3b3', 'black',
+            FONT_LARGEST - 3, '#d7eff2', '#76c9d4',
             FULL_WIDTH * 3/6, WHEEL_WIDTH
         )
     )
@@ -260,7 +271,7 @@
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 4, '#00cdcd', 'black',
+            FONT_LARGEST - 4, '#eaf7f8', '#76c9d4',
             FULL_WIDTH * 2/6, WHEEL_WIDTH
         )
     )
