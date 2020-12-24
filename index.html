@@ -374,28 +374,37 @@
             });
         });
 
+        // Event handler for the Draggable, which detects which character is selected, and calls the decryption function (if this character changed)
+        const onDrag = function() {
+            let rotation = -this.rotation; // Reverse the rotation, because it's actually the left-hand rotation that is going upward (A...B...C...)
+            rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
+            rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
+
+            const symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
+            console.log(symbolIndex)
+            const previousValue = keywordCharCodes[i];
+            keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
+            keywordLetterElems[i].value = currentWheel.symbols[symbolIndex];
+            if (previousValue !== keywordCharCodes[i]) { // Only fire event handling fn if the value actually changed (debouncing for efficiency)
+                keywordLetterElems[i].dispatchEvent(new Event('input'));
+            }
+        };
 
         // Define a GSAP Draggable for this wheel
         const SLICE_IN_DEGREES = currentWheel.slice * 180 / Math.PI; // The arc length of a single slice of the wheel, converted to degrees
-        Draggable.create(wheelContainerElem, {
+        const draggable = Draggable.create(wheelContainerElem, {
             type: 'rotation',
             minimumMovement: 10,
             dragClickables: true,
             trigger: `.draggable-handle-${i}`, // Trigger is a selector that limits which part of the element's subtree because the clickable drag handles
-            onDrag: function() {
-                let rotation = -this.rotation; // Reverse the rotation, because it's actually the left-hand rotation that is going upward (A...B...C...)
-                rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
-                rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
-
-                const symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
-                const previousValue = keywordCharCodes[i];
-                keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
-                keywordLetterElems[i].value = currentWheel.symbols[symbolIndex];
-                if (previousValue !== keywordCharCodes[i]) { // Only fire event handling fn if the value actually changed (debouncing for efficiency)
-                    keywordLetterElems[i].dispatchEvent(new Event('input'));
-                }
-            }
+            onDrag: onDrag
         });
+
+
+        // Start the wheel at a random rotation
+        TweenLite.set(wheelContainerElem, {rotation: Math.trunc(Math.random() * 26 + 1) * SLICE_IN_DEGREES});
+        draggable[0].update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
+        onDrag.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
     }
 </script>
 </body>
