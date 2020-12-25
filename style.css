@@ -1,0 +1,148 @@
+html, body {
+    height: 100%;
+}
+
+.wheel {
+    position: absolute;
+    pointer-events: none; /* Will "pass through" any clicks/taps to elements underneath in z-order */
+}
+
+.wheel-circle-background {
+    border-style: solid;
+    border-radius: 50%; /* Makes this into a circle */
+    position: relative; /* left & top set dynamically */
+    pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
+}
+
+.box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
+}
+
+.box-text {
+    /* Contains the text for this slice */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Xanh Mono', monospace;
+}
+
+#container-wheels {
+    overflow: hidden;
+    position: relative;
+    max-width: 540px;
+}
+
+#hub-container {
+    position: absolute;
+    pointer-events: none; /* Will "pass through" any clicks/taps to elements underneath in z-order */
+}
+
+#hub-circle-background {
+    border-radius: 50%; /* Makes this into a circle */
+    position: relative; /* left & top set dynamically */
+    pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
+    background-color: #4fbac8;
+    border-color: #4fbac8;
+}
+
+#hub-circle-snowflake {
+    /*   Christmas snowflake by ProSymbols from the Noun Project https://thenounproject.com/search/?q=snowflake&i=2143715 */
+    content:url("snowflake.png");
+    position: relative;
+}
+
+
+#selected-letters-encircled {
+    border: 3px solid goldenrod;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    /* Position and size are set dynamically */
+    display: none; /* hide me until positioned correctly (prevents jumpy rendering) */
+}
+
+#selected-letters-pointer {
+    /* Make a small triangle, see https://css-tricks.com/snippets/css/css-triangle/ */
+    width: 0;
+    height: 0;
+    /* Border-width, which sets the width of the triangle, must be set dynamically */
+    border-style: solid;
+    border-color: goldenrod;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    position: relative;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#container-codes {
+    max-width: 540px;
+    position: relative;
+}
+
+#container-ciphertext, #container-keywords, #container-plaintext {
+    margin: 20px 0;
+}
+
+#container-ciphertext input[type=text], #container-plaintext input[type=text] {
+    text-align: center;
+    border-color: #76c9d4;
+}
+
+#container-keywords {
+    text-align: center;
+}
+
+.keyword-letter {
+    margin: 0 5px;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border: 2px solid goldenrod;
+    border-radius: 50%;
+    text-align: center;
+    padding: 2px 0;
+    font-size: 18px;
+    color: #333;
+    font-family: 'Xanh Mono', monospace;
+    font-weight: bold;
+    display: inline-block; /* Makes them respect text-align:center */
+}
+
+.keyword-letter:disabled {
+    background-color: white; /* Override the disabled appearance */
+}
+
+.text-cipher, .text-plain {
+    width: 100%;
+    font-family: 'Cutive Mono', monospace;
+}
+
+.text-plain {
+    background-color: #c3e8ec;
+    color: #222;
+}
+
+.narrative-text {
+    font-family: 'Charmonman', cursive;
+    font-size: 1.8em;
+}
+
+a {
+    color: goldenrod
+}
+.btn, .btn:hover, .btn:active, .btn:focus {
+    background-color: goldenrod;
+    color: white;
+    border: 0;
+    font-family: 'Cutive Mono', monospace;
+}
+.btn:focus {
+    box-shadow: 0 0 0 .25rem #ffcf5b;
+}
