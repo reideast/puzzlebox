@@ -187,22 +187,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="narrative-text">
-                    You are presented with a cylindrical wooden box. You open the lid of the box, revealing a series of
-                    concentric code wheels. Atop the wheels lays a parchment with some kind of <strong>crossed words</strong> on it!
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="secretModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -519,8 +503,26 @@
 
     // Append the hub to the center of the wheel. (Done down below here so the z-index matches where it is logically in the DOM)
     containerElem.appendChild(hubContainerElem);
-
-    (new bootstrap.Modal(document.getElementById('introModal'))).show();
+</script>
+<div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="narrative-text">
+                    You are presented with a cylindrical wooden box. You open the lid of the box, revealing a series of
+                    concentric code wheels. Atop the wheels lays a parchment with some kind of <strong>crossed words</strong> on it!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', function(e) {
+        (new bootstrap.Modal(document.getElementById('introModal'))).show();
+    });
 </script>
 </body>
 </html>
