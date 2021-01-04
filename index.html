@@ -58,8 +58,11 @@
     const keywordCharCodes = []; // Holds the chars for the currently-selected character on each code wheel
 
     // Called by the wheel updating
-    function cipherUpdated() {
-        console.log("Current wheel values: " + keywordCharCodes.join(''));
+    const solution = ['LR', 'RL'];
+    function characterWheelUpdated() {
+        if (solution.includes(keywordCharCodes.join(''))) {
+            (new bootstrap.Modal(document.getElementById('secretModal'))).show();
+        }
     }
 
     function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize, offsetFromTop) {
@@ -239,15 +242,9 @@
             rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
             rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 
-            // TODO Make sure this math is right
             let symbolIndex = Math.trunc((rotation / 360) * alphabetSize); // Convert decimal degrees to integral number of symbols
             symbolIndex = (((symbolIndex - currentWheel.offsetFromTop) % alphabetSize) + alphabetSize) % alphabetSize;
-            const previousValue = keywordCharCodes[i];
-            // keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
             keywordCharCodes[i] = currentWheel.symbols[symbolIndex]; // Get the letter currently shown
-            if (previousValue !== keywordCharCodes[i]) { // Only fire event handling fn if the value actually changed (debouncing for efficiency)
-                cipherUpdated();
-            }
         };
 
         // Define a GSAP Draggable for this wheel
@@ -314,7 +311,8 @@
         type: 'rotation',
         minimumMovement: 10,
         trigger: "#handle-outer-ball", // Can only drag this via the "ball" handle
-        onDrag: onDragOuterHandle
+        onDrag: onDragOuterHandle,
+        onDragEnd: characterWheelUpdated,
     })[0];
     // Start the handle at a random rotation
     TweenLite.set(handleOuterContainerElem, {rotation: Math.trunc(Math.random() * 360)});
@@ -374,7 +372,8 @@
         type: 'rotation',
         minimumMovement: 10,
         trigger: "#handle-inner-ball", // Can only drag this via the "ball" handle
-        onDrag: onDragInnerHandle
+        onDrag: onDragInnerHandle,
+        onDragEnd: characterWheelUpdated,
     })[0];
     // Start the handle at a random rotation
     TweenLite.set(handleInnerContainerElem, {rotation: Math.trunc(Math.random() * 360)});
