@@ -117,32 +117,6 @@
     // Set the height of the wheels area to a defined value
     insertRule('#container-wheels', `height: ${CENTER_AXIS * 2}px`)
 
-    // Create outer container for the "lid" over the letter wheels
-    const lidContainerElem = document.createElement('div');
-    lidContainerElem.id = 'lid-container';
-    let lidContainerWidth = FULL_WIDTH;
-    let lidCenter = lidContainerWidth / 2;
-    let lidRadius = (lidContainerWidth / 2) * 0.85;
-    let lidBorderSize = FULL_WIDTH / 16;
-    insertRule('#lid-container', `width: ${lidContainerWidth}px`);
-    insertRule('#lid-container', `height: ${lidContainerWidth}px`);
-    insertRule('#lid-container', `left: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
-    insertRule('#lid-container', `top: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
-    // Create the wood/bark image inside of the lid
-    const lidImageElem = document.createElement('div');
-    lidImageElem.id = 'lid-image';
-    lidContainerElem.appendChild(lidImageElem);
-    insertRule('#lid-image', `width: ${(lidRadius * 2) + (lidBorderSize)}px`);
-    insertRule('#lid-image', `height: ${(lidRadius * 2) + (lidBorderSize)}px`);
-    insertRule('#lid-image', `left: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
-    insertRule('#lid-image', `top: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
-    // lidBackgroundElem.addEventListener('click', function(e) {
-    //     console.debug("Current code is: " + keywordCharCodes.map(c => String.fromCharCode(c + 65)).join('')); // DEBUG
-    //     if (keywordCharCodes.join('') === "18013190") {
-    //         (new bootstrap.Modal(document.getElementById('secretModal'))).show();
-    //     }
-    // });
-
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
     for (let i = 0; i < wheels.length; i++) {
@@ -261,6 +235,26 @@
         onDrag.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
     }
 
+
+    // Create outer container for the "lid" over the letter wheels
+    const lidContainerElem = document.createElement('div');
+    lidContainerElem.id = 'lid-container';
+    let lidContainerWidth = FULL_WIDTH;
+    let lidCenter = lidContainerWidth / 2;
+    let lidRadius = (lidContainerWidth / 2) * 0.85;
+    let lidBorderSize = FULL_WIDTH / 16;
+    insertRule('#lid-container', `width: ${lidContainerWidth}px`);
+    insertRule('#lid-container', `height: ${lidContainerWidth}px`);
+    insertRule('#lid-container', `left: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
+    insertRule('#lid-container', `top: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
+    // Create the wood/bark image inside of the lid
+    const lidImageElem = document.createElement('div');
+    lidImageElem.id = 'lid-image';
+    lidContainerElem.appendChild(lidImageElem);
+    insertRule('#lid-image', `width: ${(lidRadius * 2) + (lidBorderSize)}px`);
+    insertRule('#lid-image', `height: ${(lidRadius * 2) + (lidBorderSize)}px`);
+    insertRule('#lid-image', `left: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
+    insertRule('#lid-image', `top: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
     // Append the lid to the center of the wheel. (Done down below here so the z-index matches where it is logically in the DOM)
     containerElem.appendChild(lidContainerElem);
 </script>
