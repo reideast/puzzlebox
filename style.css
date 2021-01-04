@@ -58,13 +58,18 @@ html, body {
 #lid-container {
     position: absolute;
     pointer-events: none; /* Will "pass through" any clicks/taps to elements underneath in z-order */
-    border-radius: 50%; /* Makes this into a circle */
 }
 
 #lid-image {
     content:url("tree-bark.png"); /* Photo by Glenn Carstens-Peters, see: https://unsplash.com/@glenncarstenspeters?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText */
     position: relative;
     pointer-events: auto; /* Restores click functionality that was taken away by parent's pointer-events:none */
+}
+
+.handle-ball {
+    position: absolute;
+    pointer-events: auto;
+    border-radius: 50%;
 }
 
 #selected-letters-encircled {
