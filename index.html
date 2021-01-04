@@ -19,19 +19,6 @@
 <body>
 <div id="container-wheels" class="container-fluid">
     <!-- Wheels inserted here with JavaScript -->
-
-    <div id="selected-letters-encircled"><div id="selected-letters-pointer"></div></div>
-</div>
-<div id="container-codes" class="container-fluid">
-    <div id="container-ciphertext">
-        <input type="text" name="text-cipher" id="text-cipher" class="text-cipher">
-    </div>
-    <div id="container-keywords">
-        <!-- Keyword letters inserted here with JavaScript -->
-    </div>
-    <div id="container-plaintext">
-        <input type="text" name="text-plain" id="text-plain" class="text-plain" disabled="disabled">
-    </div>
 </div>
 
 <div class="modal fade" id="secretModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -63,9 +50,6 @@
     // Define the various code wheels and other items that will be referenced later
     const wheels = [];
     const keywordCharCodes = [];
-    const keywordLetterElems = [];
-    const ciphertextElem = document.getElementById("text-cipher");
-    const plaintextElem = document.getElementById("text-plain");
 
     ciphertextElem.addEventListener('input', cipherUpdated);
 
@@ -178,52 +162,34 @@
     // Set the height of the wheels area to a defined value
     insertRule('#container-wheels', `height: ${CENTER_AXIS * 2}px`)
 
-    // Position the box & pointer that indicates which letters are selected
-    insertRule('#selected-letters-pointer', `border-width: ${FONT_LARGEST * 0.35}px`) // Because of the css-trick, border-width is actually the width of the triangle
-    insertRule('#selected-letters-encircled', `height: ${CENTER_AXIS * 0.75}px`)
-    insertRule('#selected-letters-encircled', `width: ${FONT_LARGEST * 1.35}px`)
-    insertRule('#selected-letters-encircled', `top: ${CENTER_AXIS * 0.065}px`)
-    insertRule('#selected-letters-encircled', `left: ${CENTER_AXIS - ((FONT_LARGEST * 1.35) / 2)}px`)
-    insertRule('#selected-letters-encircled', 'display: block') // Return box to default state, un-hiding it
-
-
-    // Create outer container for the middle hub of the wheel
-    const hubContainerElem = document.createElement('div');
-    hubContainerElem.id = 'hub-container';
-    let hubWidth = FULL_WIDTH * 1/6;
-    let hubCenter = hubWidth / 2;
-    let hubRadius = (hubWidth / 2) * 0.85;
-    let hubBorderSize = FULL_WIDTH / 16;
-    insertRule('#hub-container', `width: ${hubWidth}px`);
-    insertRule('#hub-container', `height: ${hubWidth}px`);
-    insertRule('#hub-container', `left: ${(CENTER_AXIS - (hubWidth / 2))}px`);
-    insertRule('#hub-container', `top: ${(CENTER_AXIS - (hubWidth / 2))}px`);
-    // Create the background circle of the middle of the wheel
-    const hubBackgroundElem = document.createElement('div');
-    hubBackgroundElem.id = 'hub-circle-background';
-    hubContainerElem.appendChild(hubBackgroundElem);
-    insertRule('#hub-circle-background', `width: ${(hubRadius * 2) + (hubBorderSize)}px`);
-    insertRule('#hub-circle-background', `height: ${(hubRadius * 2) + (hubBorderSize)}px`);
-    insertRule('#hub-circle-background', `left: ${hubCenter - hubRadius - (hubBorderSize / 2)}px`);
-    insertRule('#hub-circle-background', `top: ${hubCenter - hubRadius - (hubBorderSize / 2)}px`);
-    insertRule('#hub-circle-background', `border-width: ${hubBorderSize}px`)
-    const hubImageElem = document.createElement('div');
-    hubImageElem.id = 'hub-circle-snowflake';
-    hubBackgroundElem.appendChild(hubImageElem);
-    insertRule('#hub-circle-snowflake', `width: ${hubRadius * 2}px`);
-    insertRule('#hub-circle-snowflake', `height: ${hubRadius * 2}px`);
-    insertRule('#hub-circle-snowflake', `left: ${hubBorderSize / 2}px`);
-    insertRule('#hub-circle-snowflake', `top: ${hubBorderSize / 2}px`);
-    hubBackgroundElem.addEventListener('click', function(e) {
-        console.debug("Current code is: " + keywordCharCodes.map(c => String.fromCharCode(c + 65)).join('')); // DEBUG
-        if (keywordCharCodes.join('') === "18013190") {
-            (new bootstrap.Modal(document.getElementById('secretModal'))).show();
-        }
-    });
+    // Create outer container for the "lid" over the letter wheels
+    const lidContainerElem = document.createElement('div');
+    lidContainerElem.id = 'lid-container';
+    let lidContainerWidth = FULL_WIDTH;
+    let lidCenter = lidContainerWidth / 2;
+    let lidRadius = (lidContainerWidth / 2) * 0.85;
+    let lidBorderSize = FULL_WIDTH / 16;
+    insertRule('#lid-container', `width: ${lidContainerWidth}px`);
+    insertRule('#lid-container', `height: ${lidContainerWidth}px`);
+    insertRule('#lid-container', `left: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
+    insertRule('#lid-container', `top: ${(CENTER_AXIS - (lidContainerWidth / 2))}px`);
+    // Create the wood/bark image inside of the lid
+    const lidImageElem = document.createElement('div');
+    lidImageElem.id = 'lid-image';
+    lidContainerElem.appendChild(lidImageElem);
+    insertRule('#lid-image', `width: ${(lidRadius * 2) + (lidBorderSize)}px`);
+    insertRule('#lid-image', `height: ${(lidRadius * 2) + (lidBorderSize)}px`);
+    insertRule('#lid-image', `left: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
+    insertRule('#lid-image', `top: ${lidCenter - lidRadius - (lidBorderSize / 2)}px`);
+    // lidBackgroundElem.addEventListener('click', function(e) {
+    //     console.debug("Current code is: " + keywordCharCodes.map(c => String.fromCharCode(c + 65)).join('')); // DEBUG
+    //     if (keywordCharCodes.join('') === "18013190") {
+    //         (new bootstrap.Modal(document.getElementById('secretModal'))).show();
+    //     }
+    // });
 
     // Create a wheel for each one defined above
     const containerElem = document.getElementById('container-wheels'); // Save the outer element for later
-    const keywordElem = document.getElementById('container-keywords'); // Contains the keyword text boxes
     for (let i = 0; i < wheels.length; i++) {
         const currentWheel = wheels[i];
 
@@ -251,18 +217,8 @@
         // Re-create this rule if you want each character box to have a defined box: insertRule(`.box-text-${i}`, `background: ${currentWheel.ringColor}`)
 
 
-        // Create the keyword letter text box that corresponds to this wheel
-        const keywordLetterElem = document.createElement('input');
-        keywordLetterElem.type = 'text';
-        keywordLetterElem.id = `code-keyword-${i}`;
-        keywordLetterElem.name = `code-keyword-${i}`;
-        keywordLetterElem.disabled = true;
-        keywordLetterElem.classList.add('keyword-letter')
-        keywordLetterElem.value = currentWheel.symbols[0];
-        keywordCharCodes.push(currentWheel.symbols[0].charCodeAt(0) - 65); // Init the array of characters that stores the actual keyword (minus 'A')
-        keywordLetterElems.push(keywordLetterElem); // Save this elem in an ordered array for future use
-        keywordElem.appendChild(keywordLetterElem);
-        keywordLetterElem.addEventListener('input', cipherUpdated); // Called whenever the keyword character is updated. Does decryption
+        // Create the array elem that corresponds to this wheel's currently-selected symbol
+        keywordCharCodes.push(currentWheel.symbols[0]); // Init the array of characters that stores the actual keyword
 
         // Create outer container for this wheel
         const wheelContainerElem = document.createElement('div');
@@ -348,8 +304,8 @@
         onDrag.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
     }
 
-    // Append the hub to the center of the wheel. (Done down below here so the z-index matches where it is logically in the DOM)
-    containerElem.appendChild(hubContainerElem);
+    // Append the lid to the center of the wheel. (Done down below here so the z-index matches where it is logically in the DOM)
+    containerElem.appendChild(lidContainerElem);
 </script>
 <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
