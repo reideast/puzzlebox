@@ -295,9 +295,14 @@
     insertRule('#handle-outer-ball', `background: radial-gradient(circle at ${handleBallSize / 3}px ${handleBallSize / 3}px, goldenrod, #000)`)
 
     // Dragging the handle will drag the alphabet rings "inside" the box
+    const outerAlphaWheelElem = wheelsContainerElems[0]; // Save a reference to the outer alphabet wheel elem
+    const outerAlphaWheelDraggable = wheelsDraggable[0]; // Save a reference to the outer alphabet wheel Draggable
+    const outerAlphaWheelCallback = wheelDragCallbackFunctions[0];
     function onDragOuterHandle() {
-        console.log("outerHandle", this.rotation);
-        // TODO move one of the alphabet rings
+        const rotationRatio = this.rotation * 4; // Very high rotation ratio, to simulate a high gear ratio
+        TweenLite.set(outerAlphaWheelElem, {rotation: rotationRatio});
+        outerAlphaWheelDraggable.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
+        outerAlphaWheelCallback.call(outerAlphaWheelDraggable); // Manually update stored values, binding the draggable object as `this` for the function call
     }
 
     // Define a GSAP Draggable for this wheel
@@ -308,7 +313,7 @@
         trigger: "#handle-outer-ball", // Can only drag this via the "ball" handle
         onDrag: onDragOuterHandle
     });
-    // Start the wheel at a random rotation
+    // Start the handle at a random rotation
     TweenLite.set(handleOuterContainerElem, {rotation: Math.trunc(Math.random() * 360)});
     draggable[0].update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
     onDragOuterHandle.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
