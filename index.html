@@ -262,12 +262,12 @@
 
 
     // Create outer control handle wheel
-    const outerHandleContainerSize = FULL_WIDTH * 6/6;
+    const outerHandleContainerSize = FULL_WIDTH;
     const outerHandleContainerCenter = outerHandleContainerSize / 2;
     const outerHandleWheelRadius = (outerHandleContainerSize / 2) * 0.93;
-    const outerHandleWheelBorder = FULL_WIDTH / 42;
-    const outerRingColor = "#5b311d";
-    const handleBallSize = outerHandleWheelBorder * 3.5;
+    const outerHandleWheelBorder = FULL_WIDTH / 35;
+    const handleRingColor = "#5b311d";
+    const handleBallSize = FULL_WIDTH * 3.5 / 42;
     // Create outer container for this wheel
     const handleOuterContainerElem = document.createElement('div');
     handleOuterContainerElem.id = 'handle-outer-container';
@@ -288,18 +288,17 @@
     insertRule('#handle-outer-border', `left: ${outerHandleContainerCenter - outerHandleWheelRadius}px`)
     insertRule('#handle-outer-border', `top: ${outerHandleContainerCenter - outerHandleWheelRadius}px`)
     insertRule('#handle-outer-border', `border-width: ${outerHandleWheelBorder}px`)
-    insertRule('#handle-outer-border', `border-color: ${outerRingColor}`)
+    insertRule('#handle-outer-border', `border-color: ${handleRingColor}`)
     // Create the "handle", which looks like a small ball
-    const handleBallElem = document.createElement('div');
-    handleBallElem.id = 'handle-outer-ball';
-    handleBallElem.classList.add('handle-ball');
-    handleOuterContainerElem.appendChild(handleBallElem);
+    const handleOuterBallElem = document.createElement('div');
+    handleOuterBallElem.id = 'handle-outer-ball';
+    handleOuterBallElem.classList.add('handle-ball');
+    handleOuterContainerElem.appendChild(handleOuterBallElem);
     insertRule('#handle-outer-ball', `width: ${handleBallSize}px`)
     insertRule('#handle-outer-ball', `height: ${handleBallSize}px`)
     insertRule('#handle-outer-ball', `left: ${outerHandleContainerCenter - (handleBallSize / 2)}px`)
     insertRule('#handle-outer-ball', `top: ${outerHandleContainerCenter - outerHandleWheelRadius - (handleBallSize / 2) + (outerHandleWheelBorder / 2)}px`)
     insertRule('#handle-outer-ball', `background: radial-gradient(circle at ${handleBallSize / 3}px ${handleBallSize / 3}px, goldenrod, #000)`)
-
     // Dragging the handle will drag the alphabet rings "inside" the box
     const outerAlphaWheelElem = wheelsContainerElems[0]; // Save a reference to the outer alphabet wheel elem
     const outerAlphaWheelDraggable = wheelsDraggable[0]; // Save a reference to the outer alphabet wheel Draggable
@@ -310,19 +309,77 @@
         outerAlphaWheelDraggable.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
         outerAlphaWheelCallback.call(outerAlphaWheelDraggable); // Manually update stored values, binding the draggable object as `this` for the function call
     }
-
     // Define a GSAP Draggable for this wheel
-    // const SLICE_IN_DEGREES = currentWheel.slice * 180 / Math.PI; // The arc length of a single slice of the wheel, converted to degrees
-    const draggable = Draggable.create(handleOuterContainerElem, {
+    const draggableOuterHandle = Draggable.create(handleOuterContainerElem, {
         type: 'rotation',
         minimumMovement: 10,
         trigger: "#handle-outer-ball", // Can only drag this via the "ball" handle
         onDrag: onDragOuterHandle
-    });
+    })[0];
     // Start the handle at a random rotation
     TweenLite.set(handleOuterContainerElem, {rotation: Math.trunc(Math.random() * 360)});
-    draggable[0].update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
-    onDragOuterHandle.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
+    draggableOuterHandle.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
+    onDragOuterHandle.call(draggableOuterHandle); // Manually update stored values, binding the draggable object as `this` for the function call
+
+
+    // Create inner control handle wheel
+    const innerHandleContainerSize = FULL_WIDTH * 1/5
+    const innerHandleContainerCenter = innerHandleContainerSize / 2;
+    const innerHandleWheelRadius = (innerHandleContainerSize / 2) * 0.93;
+    const innerHandleWheelBorder = FULL_WIDTH / 35;
+    // Create inner container for this wheel
+    const handleInnerContainerElem = document.createElement('div');
+    handleInnerContainerElem.id = 'handle-inner-container';
+    handleInnerContainerElem.classList.add('wheel')
+    insertRule('#handle-inner-container', 'z-index: 200');
+    containerElem.appendChild(handleInnerContainerElem);
+    insertRule('#handle-inner-container', `width: ${innerHandleContainerSize}px`)
+    insertRule('#handle-inner-container', `height: ${innerHandleContainerSize}px`)
+    insertRule('#handle-inner-container', `left: ${(CENTER_AXIS - (innerHandleContainerSize / 2))}px`)
+    insertRule('#handle-inner-container', `top: ${(CENTER_AXIS - (innerHandleContainerSize / 2))}px`)
+    // Create the background circle
+    const handleInnerBorderElem = document.createElement('div');
+    handleInnerBorderElem.id = 'handle-inner-border';
+    handleInnerBorderElem.classList.add('wheel-circle-background');
+    handleInnerContainerElem.appendChild(handleInnerBorderElem);
+    insertRule('#handle-inner-border', `width: ${(innerHandleWheelRadius * 2)}px`)
+    insertRule('#handle-inner-border', `height: ${(innerHandleWheelRadius * 2)}px`)
+    insertRule('#handle-inner-border', `left: ${innerHandleContainerCenter - innerHandleWheelRadius}px`)
+    insertRule('#handle-inner-border', `top: ${innerHandleContainerCenter - innerHandleWheelRadius}px`)
+    insertRule('#handle-inner-border', `border-width: ${innerHandleWheelBorder}px`)
+    insertRule('#handle-inner-border', `border-color: ${handleRingColor}`)
+    // Create the "handle", which looks like a small ball
+    const handleInnerBallElem = document.createElement('div');
+    handleInnerBallElem.id = 'handle-inner-ball';
+    handleInnerBallElem.classList.add('handle-ball');
+    handleInnerContainerElem.appendChild(handleInnerBallElem);
+    insertRule('#handle-inner-ball', `width: ${handleBallSize}px`)
+    insertRule('#handle-inner-ball', `height: ${handleBallSize}px`)
+    insertRule('#handle-inner-ball', `left: ${innerHandleContainerCenter - (handleBallSize / 2)}px`)
+    insertRule('#handle-inner-ball', `top: ${innerHandleContainerCenter - innerHandleWheelRadius - (handleBallSize / 2) + (innerHandleWheelBorder / 2)}px`)
+    insertRule('#handle-inner-ball', `background: radial-gradient(circle at ${handleBallSize / 3}px ${handleBallSize / 3}px, goldenrod, #000)`)
+    // Dragging the handle will drag the alphabet rings "inside" the box
+    const innerAlphaWheelElem = wheelsContainerElems[1]; // Save a reference to the inner alphabet wheel elem
+    const innerAlphaWheelDraggable = wheelsDraggable[1]; // Save a reference to the inner alphabet wheel Draggable
+    const innerAlphaWheelCallback = wheelDragCallbackFunctions[1];
+    function onDragInnerHandle() {
+        let rotationRatio = this.rotation * 1/4; // Very low rotation ratio, to simulate a low gear ratio. A lot of cranks of the inner handle are required to turn the inner alphabet wheel
+        rotationRatio = -rotationRatio; // Reversed!
+        TweenLite.set(innerAlphaWheelElem, {rotation: rotationRatio});
+        innerAlphaWheelDraggable.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
+        innerAlphaWheelCallback.call(innerAlphaWheelDraggable); // Manually update stored values, binding the draggable object as `this` for the function call
+    }
+    // Define a GSAP Draggable for this wheel
+    const draggableInnerHandle = Draggable.create(handleInnerContainerElem, {
+        type: 'rotation',
+        minimumMovement: 10,
+        trigger: "#handle-inner-ball", // Can only drag this via the "ball" handle
+        onDrag: onDragInnerHandle
+    })[0];
+    // Start the handle at a random rotation
+    TweenLite.set(handleInnerContainerElem, {rotation: Math.trunc(Math.random() * 360)});
+    draggableInnerHandle.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
+    onDragInnerHandle.call(draggableInnerHandle); // Manually update stored values, binding the draggable object as `this` for the function call
 </script>
 <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
