@@ -343,7 +343,7 @@
     const innerAlphaWheelDraggable = wheelsDraggable[1]; // Save a reference to the inner alphabet wheel Draggable
     const innerAlphaWheelCallback = wheelDragCallbackFunctions[1];
     function onDragInnerHandle() {
-        let rotationRatio = this.rotation * 1/4; // Very low rotation ratio, to simulate a low gear ratio. A lot of cranks of the inner handle are required to turn the inner alphabet wheel
+        let rotationRatio = this.rotation / 12; // Very low rotation ratio, to simulate a low gear ratio. A lot of cranks of the inner handle are required to turn the inner alphabet wheel
         rotationRatio = -rotationRatio; // Reversed!
         TweenLite.set(innerAlphaWheelElem, {rotation: rotationRatio});
         innerAlphaWheelDraggable.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
