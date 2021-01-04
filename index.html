@@ -262,33 +262,33 @@
 
 
     // Create outer control handle wheel
-    const containerSize = FULL_WIDTH * 6/6;
-    const containerCenter = containerSize / 2;
-    const wheelRadius = (containerSize / 2) * 0.93;
-    const wheelBorderSize = FULL_WIDTH / 42;
-    const ringColor = "#5b311d";
-    const handleBallSize = wheelBorderSize * 3.5;
+    const outerHandleContainerSize = FULL_WIDTH * 6/6;
+    const outerHandleContainerCenter = outerHandleContainerSize / 2;
+    const outerHandleWheelRadius = (outerHandleContainerSize / 2) * 0.93;
+    const outerHandleWheelBorder = FULL_WIDTH / 42;
+    const outerRingColor = "#5b311d";
+    const handleBallSize = outerHandleWheelBorder * 3.5;
     // Create outer container for this wheel
     const handleOuterContainerElem = document.createElement('div');
     handleOuterContainerElem.id = 'handle-outer-container';
     handleOuterContainerElem.classList.add('wheel')
     insertRule('#handle-outer-container', 'z-index: 200');
     containerElem.appendChild(handleOuterContainerElem);
-    insertRule('#handle-outer-container', `width: ${containerSize}px`)
-    insertRule('#handle-outer-container', `height: ${containerSize}px`)
-    insertRule('#handle-outer-container', `left: ${(CENTER_AXIS - (containerSize / 2))}px`)
-    insertRule('#handle-outer-container', `top: ${(CENTER_AXIS - (containerSize / 2))}px`)
+    insertRule('#handle-outer-container', `width: ${outerHandleContainerSize}px`)
+    insertRule('#handle-outer-container', `height: ${outerHandleContainerSize}px`)
+    insertRule('#handle-outer-container', `left: ${(CENTER_AXIS - (outerHandleContainerSize / 2))}px`)
+    insertRule('#handle-outer-container', `top: ${(CENTER_AXIS - (outerHandleContainerSize / 2))}px`)
     // Create the background circle
     const handleOuterBorderElem = document.createElement('div');
     handleOuterBorderElem.id = 'handle-outer-border';
     handleOuterBorderElem.classList.add('wheel-circle-background');
     handleOuterContainerElem.appendChild(handleOuterBorderElem);
-    insertRule('#handle-outer-border', `width: ${(wheelRadius * 2)}px`)
-    insertRule('#handle-outer-border', `height: ${(wheelRadius * 2)}px`)
-    insertRule('#handle-outer-border', `left: ${containerCenter - wheelRadius}px`)
-    insertRule('#handle-outer-border', `top: ${containerCenter - wheelRadius}px`)
-    insertRule('#handle-outer-border', `border-width: ${wheelBorderSize}px`)
-    insertRule('#handle-outer-border', `border-color: ${ringColor}`)
+    insertRule('#handle-outer-border', `width: ${(outerHandleWheelRadius * 2)}px`)
+    insertRule('#handle-outer-border', `height: ${(outerHandleWheelRadius * 2)}px`)
+    insertRule('#handle-outer-border', `left: ${outerHandleContainerCenter - outerHandleWheelRadius}px`)
+    insertRule('#handle-outer-border', `top: ${outerHandleContainerCenter - outerHandleWheelRadius}px`)
+    insertRule('#handle-outer-border', `border-width: ${outerHandleWheelBorder}px`)
+    insertRule('#handle-outer-border', `border-color: ${outerRingColor}`)
     // Create the "handle", which looks like a small ball
     const handleBallElem = document.createElement('div');
     handleBallElem.id = 'handle-outer-ball';
@@ -296,8 +296,8 @@
     handleOuterContainerElem.appendChild(handleBallElem);
     insertRule('#handle-outer-ball', `width: ${handleBallSize}px`)
     insertRule('#handle-outer-ball', `height: ${handleBallSize}px`)
-    insertRule('#handle-outer-ball', `left: ${containerCenter - (handleBallSize / 2)}px`)
-    insertRule('#handle-outer-ball', `top: ${containerCenter - wheelRadius - (handleBallSize / 2) + (wheelBorderSize / 2)}px`)
+    insertRule('#handle-outer-ball', `left: ${outerHandleContainerCenter - (handleBallSize / 2)}px`)
+    insertRule('#handle-outer-ball', `top: ${outerHandleContainerCenter - outerHandleWheelRadius - (handleBallSize / 2) + (outerHandleWheelBorder / 2)}px`)
     insertRule('#handle-outer-ball', `background: radial-gradient(circle at ${handleBallSize / 3}px ${handleBallSize / 3}px, goldenrod, #000)`)
 
     // Dragging the handle will drag the alphabet rings "inside" the box
