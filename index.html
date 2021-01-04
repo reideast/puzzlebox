@@ -48,8 +48,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script>
     // Define the various code wheels and other items that will be referenced later
-    const wheels = [];
-    const keywordCharCodes = [];
+    const wheels = []; // Holds the base data of the code wheel (alphabet, pixel size, color)
+    const wheelsContainerElems = []; // Holds the container elem fro this wheel, for which a Draggable will be created
+    const wheelsDraggable = []; // Holds the GSAP Draggable objects corresponding to those wheels
+    const wheelDragCallbackFunctions = []; // Contains references to the callback functions for each wheel
+    const keywordCharCodes = []; // Holds the chars for the currently-selected character on each code wheel
 
     // Called by the wheel updating
     function cipherUpdated() {
@@ -150,17 +153,17 @@
         keywordCharCodes.push(currentWheel.symbols[0]); // Init the array of characters that stores the actual keyword
 
         // Create outer container for this wheel
-        const wheelContainerElem = document.createElement('div');
-        wheelContainerElem.id = `wheel-${i}`;
-        wheelContainerElem.classList.add('wheel')
-        containerElem.appendChild(wheelContainerElem);
+        wheelsContainerElems[i] = document.createElement('div');
+        wheelsContainerElems[i].id = `wheel-${i}`;
+        wheelsContainerElems[i].classList.add('wheel')
+        containerElem.appendChild(wheelsContainerElems[i]);
 
         // Create the background circle
         const circleBackgroundElem = document.createElement('div');
         circleBackgroundElem.id = `wheel-circle-background-${i}`;
         circleBackgroundElem.classList.add(`draggable-handle-${i}`);
         circleBackgroundElem.classList.add('wheel-circle-background');
-        wheelContainerElem.appendChild(circleBackgroundElem);
+        wheelsContainerElems[i].appendChild(circleBackgroundElem);
 
 
         // Create boxes along circle
@@ -179,7 +182,7 @@
             outerBoxElem.appendChild(textContainerElem);
             outerBoxElem.dataset.character = symbol;
 
-            wheelContainerElem.appendChild(outerBoxElem);
+            wheelsContainerElems[i].appendChild(outerBoxElem);
         }
 
 
@@ -203,7 +206,7 @@
 
         // Event handler for the Draggable, which detects which character is selected, and calls the decryption function (if this character changed)
         const alphabetSize = currentWheel.symbols.length;
-        const onDrag = function() {
+        wheelDragCallbackFunctions[i] = function() {
             let rotation = -this.rotation; // Reverse the rotation, because it's actually the left-hand rotation that is going upward (A...B...C...)
             rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
             rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
@@ -221,18 +224,12 @@
 
         // Define a GSAP Draggable for this wheel
         const SLICE_IN_DEGREES = currentWheel.slice * 180 / Math.PI; // The arc length of a single slice of the wheel, converted to degrees
-        const draggable = Draggable.create(wheelContainerElem, {
+        wheelsDraggable[i] = Draggable.create(wheelsContainerElems[i], {
             type: 'rotation',
             minimumMovement: 10,
             trigger: ".doNotDrag", // Remove the ability to drag the wheel by setting `trigger` to a nonexistent elem
-            onDrag: onDrag
-        });
-
-
-        // Start the wheel at a random rotation
-        TweenLite.set(wheelContainerElem, {rotation: Math.trunc(Math.random() * 26 + 1) * SLICE_IN_DEGREES});
-        draggable[0].update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
-        onDrag.call(draggable[0]); // Manually update stored values, binding the draggable object as `this` for the function call
+            onDrag: wheelDragCallbackFunctions[i]
+        })[0]; // `0` because only one Draggable is created
     }
 
 
