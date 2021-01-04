@@ -24,24 +24,6 @@
     <!-- Wheels inserted here with JavaScript -->
 </div>
 
-<div class="modal fade" id="secretModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="narrative-text">
-                    As you press down on the unlocked button, the secret is revealed. The center opens like an
-                    iris, and a rolled parchment slowly raises out of it.
-                    You break the wax seal to <a href="santas-secret.pdf">read the parchment...</a>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
@@ -380,13 +362,31 @@
     draggableInnerHandle.update(); // Update the x/y/transform of the underlying object from the properties which it observes currently in the dom
     onDragInnerHandle.call(draggableInnerHandle); // Manually update stored values, binding the draggable object as `this` for the function call
 </script>
+
+<div class="modal fade" id="secretModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="narrative-text">
+                    <p>As you choose the correct letters, the box is unlocked!</p>
+                    <p>You open the box to reveal <a href="inside.html">what is inside...</a></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="narrative-text">
-                    The puzzle box is shut fast by a lid made of rough tree bark. There is a heart carved upon it, and
-                    two small windows revealing letters inside the box. There are handles on the lid which crank in circles.
+                    <p>The puzzle box is shut fast by a lid made of rough tree bark. There is a heart carved upon it,
+                    with two small windows that reveal letters that are inside the box.</p>
+                    <p>There are handles on the lid which crank in circles.</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -396,11 +396,9 @@
     </div>
 </div>
 <script>
-    /* DEBUG: Do not show initial popup
     window.addEventListener('load', function(e) {
         (new bootstrap.Modal(document.getElementById('introModal'))).show();
     });
-    */
 </script>
 </body>
 </html>
