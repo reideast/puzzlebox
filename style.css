@@ -27,6 +27,7 @@ html, body {
     align-items: center;
     justify-content: center;
     font-family: 'Xanh Mono', monospace;
+    user-select: none;
 }
 
 #container-wheels {

@@ -51,37 +51,12 @@
     const wheels = [];
     const keywordCharCodes = [];
 
-    ciphertextElem.addEventListener('input', cipherUpdated);
-
-    // Triggered by either the ciphertext updating or any of the array of keyword letters text boxes updating
+    // Called by the wheel updating
     function cipherUpdated() {
-        const ciphertext = ciphertextElem.value;
-        const decrypted = [];
-        for (let i = 0; i < ciphertext.length; i++) {
-            decrypted.push(decryptChar(ciphertext.charCodeAt(i), i));
-        }
-        plaintextElem.value = decrypted.join('');
+        console.log("Current wheel values: " + keywordCharCodes.join(''));
     }
 
-    // Vigenere decryption per character
-    function decryptChar(cipherCharCode, index) {
-        let decryptedCharCode;
-        if (cipherCharCode >= 65 && cipherCharCode <= 90) { // [A-Z]
-            decryptedCharCode = decryptAlphabetIndexedChar((cipherCharCode - 65), keywordCharCodes[index % keywordCharCodes.length]) + 65;
-        } else if (cipherCharCode >= 97 && cipherCharCode <= 122) { // [a-z]
-            decryptedCharCode = decryptAlphabetIndexedChar((cipherCharCode - 97), keywordCharCodes[index % keywordCharCodes.length]) + 97;
-        } else {
-            // Pass through any non-alphabetic characters
-            decryptedCharCode = cipherCharCode;
-        }
-        return String.fromCharCode(decryptedCharCode);
-    }
-
-    function decryptAlphabetIndexedChar(cipherAlphabetIndexed, keyAlphabetIndexed) {
-        return (cipherAlphabetIndexed - keyAlphabetIndexed + 26) % 26;
-    }
-
-    function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize) {
+    function generateWheelPropertiesObject(symbols, fontSize, ringColor, innerColor, wheelSize, boxSize, offsetFromTop) {
         return {
             symbols: symbols,
             fontSize: fontSize,
@@ -93,6 +68,8 @@
             center: wheelSize / 2, // Center point, and the axis of rotation. The center is halfway across the diameter of the entire wheel element
             radius: (wheelSize / 2) * 0.85, // Width of the wheel's circle, inside of the container square. Radius of circle is slightly smaller than diameter of entire element (based on size of boxes)
             slice: 2 * Math.PI / symbols.length, // Arc given to each symbol, in radians
+
+            offsetFromTop: offsetFromTop
         };
     }
 
@@ -101,47 +78,25 @@
     const WHEEL_WIDTH = FULL_WIDTH / 16;
     const FONT_LARGEST = 24 * FULL_WIDTH / 540;
 
-    // Outer code wheel
-    wheels.push(
-        generateWheelPropertiesObject(
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST, '#9dd8e0', '#76c9d4',
-            FULL_WIDTH * 6/6, WHEEL_WIDTH
-        )
-    )
+    const CENTER_AXIS = FULL_WIDTH / 2; // Save the center of the largest wheel. Later, all wheels will be positioned around this
 
-    const CENTER_AXIS = wheels[0].center; // Save the center of the largest wheel. Later, all wheels will be positioned around this
-
-    // Second largest code wheel
-    wheels.push(
-        generateWheelPropertiesObject(
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 1, '#b0e0e6', '#76c9d4',
-            FULL_WIDTH * 5/6, WHEEL_WIDTH
-        )
-    )
-
+    // Middle code wheel
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
             FONT_LARGEST - 2, '#c3e8ec', '#76c9d4',
-            FULL_WIDTH * 4/6, WHEEL_WIDTH
+            FULL_WIDTH * 4/6, WHEEL_WIDTH,
+            +2
         )
     )
 
+    // Second smallest code wheel
     wheels.push(
         generateWheelPropertiesObject(
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
             FONT_LARGEST - 3, '#d7eff2', '#76c9d4',
-            FULL_WIDTH * 3/6, WHEEL_WIDTH
-        )
-    )
-
-    wheels.push(
-        generateWheelPropertiesObject(
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            FONT_LARGEST - 4, '#eaf7f8', '#76c9d4',
-            FULL_WIDTH * 2/6, WHEEL_WIDTH
+            FULL_WIDTH * 3/6, WHEEL_WIDTH,
+            -1
         )
     )
 
@@ -273,17 +228,20 @@
         });
 
         // Event handler for the Draggable, which detects which character is selected, and calls the decryption function (if this character changed)
+        const alphabetSize = currentWheel.symbols.length;
         const onDrag = function() {
             let rotation = -this.rotation; // Reverse the rotation, because it's actually the left-hand rotation that is going upward (A...B...C...)
             rotation += (SLICE_IN_DEGREES / 2); // Shift by half an arc, accounting for the width of each letter
             rotation = ((rotation % 360) + 360) % 360; // Formula is for actual modulo (not remainder), per https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 
-            const symbolIndex = Math.trunc((rotation / 360) * currentWheel.symbols.length); // Convert decimal degrees to integral number of symbols
+            // TODO Make sure this math is right
+            let symbolIndex = Math.trunc((rotation / 360) * alphabetSize); // Convert decimal degrees to integral number of symbols
+            symbolIndex = (((symbolIndex - currentWheel.offsetFromTop) % alphabetSize) + alphabetSize) % alphabetSize;
             const previousValue = keywordCharCodes[i];
-            keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
-            keywordLetterElems[i].value = currentWheel.symbols[symbolIndex];
+            // keywordCharCodes[i] = currentWheel.symbols[symbolIndex].charCodeAt(0) - 65; // Get the ASCII char code of the letter, minus 'A'
+            keywordCharCodes[i] = currentWheel.symbols[symbolIndex]; // Get the letter currently shown
             if (previousValue !== keywordCharCodes[i]) { // Only fire event handling fn if the value actually changed (debouncing for efficiency)
-                keywordLetterElems[i].dispatchEvent(new Event('input'));
+                cipherUpdated();
             }
         };
 
@@ -292,8 +250,7 @@
         const draggable = Draggable.create(wheelContainerElem, {
             type: 'rotation',
             minimumMovement: 10,
-            dragClickables: true,
-            trigger: `.draggable-handle-${i}`, // Trigger is a selector that limits which part of the element's subtree because the clickable drag handles
+            trigger: ".doNotDrag", // Remove the ability to drag the wheel by setting `trigger` to a nonexistent elem
             onDrag: onDrag
         });
 
